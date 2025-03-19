@@ -313,25 +313,9 @@ end
 *******************************************
 ]]
 
--- Activate Autohook
+VerifyPlugins(RequiredPlugins)
 
 
-
-CharacterState = {
-    ready = Ready,
-    teleportToFishingZone = TeleportToFishingZone,
-    goToFishingHole = GoToFishingHole,
-    extractMateria = ExecuteExtractMateria,
-    repair = ExecuteRepair,
-    exchangingVouchers = ExecuteBicolorExchange,
-    processRetainers = ProcessRetainers,
-    gcTurnIn = ExecuteGrandCompanyTurnIn,
-    fishing = Fishing,
-    turnIn = TurnIn,
-    scripExchange = ScripExchange,
-    goToHubCity = GoToHubCity,
-    buyFishingBait = BuyFishingBait
-}
 
 
 
@@ -350,17 +334,6 @@ yield("/ahon")
 DeleteAllAutoHookAnonymousPresets()
 UseAutoHookAnonymousPreset(autohookPreset)
 
--- Validate HubCity selection
-for _, city in ipairs(HubCities) do
-    if city.zoneName == HubCity then
-        SelectedHubCity = city
-        SelectedHubCity.aetheryte = GetAetheryteName(GetAetherytesInZone(city.zoneId)[0])
-    end
-end
-if SelectedHubCity == nil then
-    yield("/vnav stop")
-    BreakOut(" Could not find hub city: "..HubCity)
-end
 
 -- Make sure we're a Fisher
 if GetClassJobId() ~= 18 then
@@ -369,6 +342,18 @@ if GetClassJobId() ~= 18 then
 end
 
 -- Start the state machine
+CharacterState = {
+    ready = Ready,
+    teleportToFishingZone = TeleportToFishingZone,
+    goToFishingHole = GoToFishingHole,
+    extractMateria = ExecuteExtractMateria,
+    repair = ExecuteRepair,
+    fishing = Fishing,
+    goToHubCity = GoToHubCity,
+    buyFishingBait = BuyFishingBait
+}
+StopFlag = false
+
 State = CharacterState.ready
 while not StopFlag do
     State()
