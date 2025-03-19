@@ -71,6 +71,7 @@ ARRFishingAchievements - List of Achievements to complete, and where to fish for
 ]]
 ARRFishingAchievements = 
 {
+--[[
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea I",
         AchievementNumber = 259,
@@ -86,15 +87,23 @@ ARRFishingAchievements =
                 { x=-76.85, y=44.86, z=-130.74 },
                 { x=-105.57, y=44.95, z=-156.99 },
             },
-            pointToFace = { x=-66.69, y=45.00, z=-173.75 }
+            pointToFace = { x=-66.69, y=45.00, z=-173.75 },
         },
     },
---[[
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea II",
         AchievementNumber = 261,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = ,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea III",
@@ -156,12 +165,25 @@ ARRFishingAchievements =
         Location = "",
         ReleaseBitmask = ,
     },
+]]
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan III",
         AchievementNumber = 273,
-        Location = "",
-        ReleaseBitmask = ,
+        Spot = "Burnt Lizard Creek",
+        ReleaseBitmask = 63,
+        zoneId = 146,
+        zoneName = "Southern Thanalan",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=37.10, y=3.40, z=-344.93 },
+                { x=35.38, y=3.71, z=-308.11 },
+                { x=-9.13, y=14.98, z=-321.11 },
+            },
+            pointToFace = { x=15.07, y=-16.25, z=-323.77 },
+        },
     },
+--[[
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan IV",
         AchievementNumber = 274,
@@ -207,20 +229,13 @@ ARRFishingAchievements =
 ]]
 }
 
--- RequiredPlugins - set the basic list of variables
+-- RequiredPlugins - what we need to actually run this.
 RequiredPlugins = {
     "Lifestream",
     "TeleporterPlugin",
     "vnavmesh",
     "AutoHook"
 }
-if Retainers then
-    table.insert(RequiredPlugins, "AutoRetainer")
-end
-if GrandCompanyTurnIn then
-    table.insert(RequiredPlugins, "Deliveroo")
-end
-
 
 -- autohookPreset - Decide which Preset to use via UseCordials.  Only difference is Cordials or no.
 if UseCordials then
@@ -313,20 +328,8 @@ end
 *******************************************
 ]]
 
+-- Make sure that all the plugins we need are installed.
 VerifyPlugins(RequiredPlugins)
-
-
-
-
-
-
-for _, Achievement in ipairs(ARRFishingAchievements) do
-    if IsAchievementComplete(Achievement.AchievementNumber) then
-        yield("/echo Completed: "..Achievement.AchievementName..".")
-    else
-        yield("/echo Needs work: "..Achievement.AchievementName..".")
-    end
-end
 
 
 -- Activate Autohook, delete any "anon_*" presents, and then load our preset as "anon_"
@@ -352,10 +355,20 @@ CharacterState = {
     goToHubCity = GoToHubCity,
     buyFishingBait = BuyFishingBait
 }
-StopFlag = false
 
-State = CharacterState.ready
-while not StopFlag do
-    State()
-    yield("/wait 0.1")
+for _, Achievement in ipairs(ARRFishingAchievements) do
+    if IsAchievementComplete(Achievement.AchievementNumber) then
+        yield("/echo Already Complete: "..Achievement.AchievementName..".")
+    else
+        yield("/echo Starting: "..Achievement.AchievementName..".")
+        State = CharacterState.ready
+        StopFlag = false
+        while not StopFlag do
+            State()
+            yield("/wait 0.1")
+        end
+        yield("/echo Completed: "..Achievement.AchievementName..".")
+    end
 end
+
+
