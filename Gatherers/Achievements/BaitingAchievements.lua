@@ -350,6 +350,17 @@ yield("/ahon")
 DeleteAllAutoHookAnonymousPresets()
 UseAutoHookAnonymousPreset(autohookPreset)
 
+-- Validate HubCity selection
+for _, city in ipairs(HubCities) do
+    if city.zoneName == HubCity then
+        SelectedHubCity = city
+        SelectedHubCity.aetheryte = GetAetheryteName(GetAetherytesInZone(city.zoneId)[0])
+    end
+end
+if SelectedHubCity == nil then
+    yield("/vnav stop")
+    BreakOut(" Could not find hub city: "..HubCity)
+end
 
 -- Make sure we're a Fisher
 if GetClassJobId() ~= 18 then
