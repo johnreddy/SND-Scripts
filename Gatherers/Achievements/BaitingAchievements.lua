@@ -45,9 +45,20 @@ Inspired by pot0to's FishingGathererScrips - https://github.com/pot0to/pot0to-SN
 ]]
 
 UseCordials                = false     --If true, will use cordials when fishing
+MoveSpotsAfter             = 30        --Number of minutes to fish at this spot before changing spots.
+ResetHardAmissAfter        = 120       --Number of minutes to farm in current instance before teleporting away and back
+
+Food                       = ""        --what food to eat
+Potion                     = "Superior Spiritbond Potion <hq>"     --what potion to use
+
+--things you want to enable
 ExtractMateria             = true      --If true, will extract materia if possible
+ReduceEphemerals           = true      --If true, will reduce ephemerals if possible
+SelfRepair                 = true      --If true, will do repair if possible set repair amount below
+RepairAmount               = 1         --repair threshold, adjust as needed
 
-
+-- Keep this? Maybe implement breakout for inventory full when processing materia -JR
+--MinInventoryFreeSlots      = 1         --set carefully
 
 --[[
 *******************************************
@@ -58,6 +69,15 @@ ExtractMateria             = true      --If true, will extract materia if possib
 *******************************************
 *******************************************
 ]]
+
+-- This name will be used whereever logging entries are made.
+ThisScriptName = "BaitingAchievements"
+
+-- Grade 8 Dark Matter is current highest, item number 33916
+DarkMatter = 33916
+
+-- Versatile Lure is the bait we're using here
+VersatileLure = 29717
 
 --[[
 ARRFishingAchievements - List of Achievements to complete, and where to fish for them.
@@ -297,6 +317,128 @@ end
 
 --[[
 *******************************************
+*                                         *
+*    State Machine High Level             *
+*                                         *
+*******************************************
+]]
+--[[
+Ready - initialize a cycle
+- Make sure food & pots are consumed if needed
+- Make sure player is ready to do something
+- Change state to do one of:
+    - Perform repairs
+    - Extract materia
+    - Check for sufficient bait (and then go buy it if needed)
+    - Go to the fishing hole
+]]
+function Ready()
+    FoodCheck()
+    PotionCheck()
+
+    if not LogInfo("["..ThisScriptName.."] Ready -> IsPlayerAvailable()") and not IsPlayerAvailable() then
+        -- do nothing
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> Repair") and RepairAmount > 0 and NeedsRepair(RepairAmount) and
+        (not shouldWaitForBonusBuff or (SelfRepair and GetItemCount(DarkMatter) > 0)) then
+        State = CharacterState.repair
+        LogInfo("["..ThisScriptName.."] State Change: Repair")
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> ExtractMateria") and ExtractMateria and CanExtractMateria(100) and GetInventoryFreeSlotCount() > 1 then
+        State = CharacterState.extractMateria
+        LogInfo("["..ThisScriptName.."] State Change: ExtractMateria")
+    elseif GetItemCount(VersatileLure) == 0 then
+        State = CharacterState.buyFishingBait
+        LogInfo("["..ThisScriptName.."] tate Change: Buy Fishing Bait")
+    else
+        State = CharacterState.goToFishingHole
+        LogInfo("["..ThisScriptName.."] State Change: GoToFishingHole")
+    end
+end
+
+--[[
+TeleportToFishingZone
+- If not in the target fishing zone, then
+    - teleport to an Aetheryte in that zone
+- If in the target fishing zone, then
+    - Select one of the fishing hole for the current achievement
+    - Change state to go to the fishing hole
+]]
+function TeleportToFishingZone()
+    if not IsInZone(Achievement.zoneId) then
+        TeleportTo(Achievement.closestAetheryte.aetheryteName)
+    elseif not GetCharacterCondition(CharacterCondition.betweenAreas) then
+        yield("/wait 3")
+        SelectNewFishingHole()
+        ResetHardAmissTime = os.clock()
+        State = CharacterState.goToFishingHole
+        LogInfo("["..ThisScriptName.."] GoToFishingHole")
+    end
+end
+
+--[[
+GoToFishingHole
+
+- If not in the target fishing zone, then
+    - Change state to get to the fishing hole
+- 
+
+
+]]
+function GoToFishingHole()
+    if not IsInZone(Achievement.zoneId) then
+        State = CharacterState.teleportToFishingZone
+        LogInfo("["..ThisScriptName.."] TeleportToFishingZone")
+        return
+    end
+
+    -- if stuck for over 10s, adjust
+    local now = os.clock()
+    if now - SelectedFishingSpot.startTime > 10 then
+        SelectedFishingSpot.startTime = now
+        local x = GetPlayerRawXPos()
+        local y = GetPlayerRawYPos()
+        local z = GetPlayerRawZPos()
+        local lastStuckCheckPosition = SelectedFishingSpot.lastStuckCheckPosition
+        if GetDistanceToPoint(lastStuckCheckPosition.x, lastStuckCheckPosition.y, lastStuckCheckPosition.z) < 2 then
+            LogInfo("["..ThisScriptName.."] Stuck in same spot for over 10 seconds.")
+            if PathfindInProgress() or PathIsRunning() then
+                yield("/vnav stop")
+            end
+            local randomX, randomY, randomZ = RandomAdjustCoordinates(x, y, z, 20)
+            if randomX ~= nil and randomY ~= nil and randomZ ~= nil then
+                PathfindAndMoveTo(randomX, randomY, randomZ, GetCharacterCondition(CharacterCondition.mounted))
+            end
+            return
+        else
+            SelectedFishingSpot.lastStuckCheckPosition = { x = x, y = y, z = z }
+        end
+    end
+
+    if GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ) > 10 then
+        LogInfo(""..ThisScriptName.."] Too far from waypoint! Currently "..GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ).." distance.")
+        if not GetCharacterCondition(CharacterCondition.mounted) then
+            Mount(CharacterState.goToFishingHole)
+            LogInfo("State Change: Mounting")
+        elseif not (PathfindInProgress() or PathIsRunning()) then
+            LogInfo("["..ThisScriptName.."] Moving to waypoint: ("..SelectedFishingSpot.waypointX..", "..SelectedFishingSpot.waypointY..", "..SelectedFishingSpot.waypointZ..")")
+            PathfindAndMoveTo(SelectedFishingSpot.waypointX, SelectedFishingSpot.waypointY, SelectedFishingSpot.waypointZ, true)
+        end
+        yield("/wait 1")
+        return
+    end
+
+    if GetCharacterCondition(CharacterCondition.mounted) then
+        Dismount()
+        LogInfo("["..ThisScriptName.."] State Change: Dismount")
+        return
+    end
+
+    State = CharacterState.fishing
+    LogInfo("["..ThisScriptName.."] State Change: Fishing")
+end
+
+
+--[[
+*******************************************
 *******************************************
 *                                         *
 *    Fishing Functions                    *
@@ -320,23 +462,19 @@ end
 
 --[[
 *******************************************
-*******************************************
 *                                         *
-*    Main Loop                            *
+*    Main Code                            *
 *                                         *
-*******************************************
 *******************************************
 ]]
 
 -- Make sure that all the plugins we need are installed.
 VerifyPlugins(RequiredPlugins)
 
-
 -- Activate Autohook, delete any "anon_*" presents, and then load our preset as "anon_"
 yield("/ahon")
 DeleteAllAutoHookAnonymousPresets()
 UseAutoHookAnonymousPreset(autohookPreset)
-
 
 -- Make sure we're a Fisher
 if GetClassJobId() ~= 18 then
@@ -344,7 +482,7 @@ if GetClassJobId() ~= 18 then
     yield("/wait 1")
 end
 
--- Start the state machine
+-- Prep the state machine
 CharacterState = {
     ready = Ready,
     teleportToFishingZone = TeleportToFishingZone,
@@ -356,6 +494,7 @@ CharacterState = {
     buyFishingBait = BuyFishingBait
 }
 
+-- Run the state machine for each 
 for _, Achievement in ipairs(ARRFishingAchievements) do
     if IsAchievementComplete(Achievement.AchievementNumber) then
         yield("/echo Already Complete: "..Achievement.AchievementName..".")
@@ -363,11 +502,11 @@ for _, Achievement in ipairs(ARRFishingAchievements) do
         yield("/echo Starting: "..Achievement.AchievementName..".")
         State = CharacterState.ready
         StopFlag = false
-        while not StopFlag do
+        while not StopFlag and not IsAchievementComplete(Achievement.AchievementNumber) do
             State()
             yield("/wait 0.1")
         end
-        yield("/echo Completed: "..Achievement.AchievementName..".")
+        if StopFlag then
     end
 end
 
