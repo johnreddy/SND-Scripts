@@ -104,17 +104,17 @@ end
 function SelectNewFishingHole()
     LogInfo("["..ThisScriptName.."] Selecting new fishing hole")
 
-    -- if SelectedFish.fishingSpots.waypoints ~= nil then
-    SelectedFishingSpot = GetWaypoint(SelectedFish.fishingSpots.waypoints, math.random())
+    -- if Achievement.fishingSpots.waypoints ~= nil then
+    SelectedFishingSpot = GetWaypoint(Achievement.fishingSpots.waypoints, math.random())
     SelectedFishingSpot.waypointY = QueryMeshPointOnFloorY(
-        SelectedFishingSpot.waypointX, SelectedFish.fishingSpots.maxHeight, SelectedFishingSpot.waypointZ, false, 50)
+        SelectedFishingSpot.waypointX, Achievement.fishingSpots.maxHeight, SelectedFishingSpot.waypointZ, false, 50)
 
-    SelectedFishingSpot.x = SelectedFish.fishingSpots.pointToFace.x
-    SelectedFishingSpot.y = SelectedFish.fishingSpots.pointToFace.y
-    SelectedFishingSpot.z = SelectedFish.fishingSpots.pointToFace.z
+    SelectedFishingSpot.x = Achievement.fishingSpots.pointToFace.x
+    SelectedFishingSpot.y = Achievement.fishingSpots.pointToFace.y
+    SelectedFishingSpot.z = Achievement.fishingSpots.pointToFace.z
     -- else
-    --     local n = math.random(1, #SelectedFish.fishingSpots)
-    --     SelectedFishingSpot = SelectedFish.fishingSpots[n]
+    --     local n = math.random(1, #Achievement.fishingSpots)
+    --     SelectedFishingSpot = Achievement.fishingSpots[n]
     -- end
     SelectedFishingSpot.startTime = os.clock()
     SelectedFishingSpot.lastStuckCheckPosition = {
@@ -135,8 +135,8 @@ function RandomAdjustCoordinates(x, y, z, maxDistance)
 end
 
 function TeleportToFishingZone()
-    if not IsInZone(SelectedFish.zoneId) then
-        TeleportTo(SelectedFish.closestAetheryte.aetheryteName)
+    if not IsInZone(Achievement.zoneId) then
+        TeleportTo(Achievement.closestAetheryte.aetheryteName)
     elseif not GetCharacterCondition(CharacterCondition.betweenAreas) then
         yield("/wait 3")
         SelectNewFishingHole()
@@ -146,62 +146,11 @@ function TeleportToFishingZone()
     end
 end
 
-function GoToFishingHole()
-    if not IsInZone(SelectedFish.zoneId) then
-        State = CharacterState.teleportToFishingZone
-        LogInfo("["..ThisScriptName.."] TeleportToFishingZone")
-        return
-    end
 
-    -- if stuck for over 10s, adjust
-    local now = os.clock()
-    if now - SelectedFishingSpot.startTime > 10 then
-        SelectedFishingSpot.startTime = now
-        local x = GetPlayerRawXPos()
-        local y = GetPlayerRawYPos()
-        local z = GetPlayerRawZPos()
-        local lastStuckCheckPosition = SelectedFishingSpot.lastStuckCheckPosition
-        if GetDistanceToPoint(lastStuckCheckPosition.x, lastStuckCheckPosition.y, lastStuckCheckPosition.z) < 2 then
-            LogInfo("["..ThisScriptName.."] Stuck in same spot for over 10 seconds.")
-            if PathfindInProgress() or PathIsRunning() then
-                yield("/vnav stop")
-            end
-            local randomX, randomY, randomZ = RandomAdjustCoordinates(x, y, z, 20)
-            if randomX ~= nil and randomY ~= nil and randomZ ~= nil then
-                PathfindAndMoveTo(randomX, randomY, randomZ, GetCharacterCondition(CharacterCondition.mounted))
-            end
-            return
-        else
-            SelectedFishingSpot.lastStuckCheckPosition = { x = x, y = y, z = z }
-        end
-    end
-
-    if GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ) > 10 then
-        LogInfo(""..ThisScriptName.."] Too far from waypoint! Currently "..GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ).." distance.")
-        if not GetCharacterCondition(CharacterCondition.mounted) then
-            Mount(CharacterState.goToFishingHole)
-            LogInfo("State Change: Mounting")
-        elseif not (PathfindInProgress() or PathIsRunning()) then
-            LogInfo("["..ThisScriptName.."] Moving to waypoint: ("..SelectedFishingSpot.waypointX..", "..SelectedFishingSpot.waypointY..", "..SelectedFishingSpot.waypointZ..")")
-            PathfindAndMoveTo(SelectedFishingSpot.waypointX, SelectedFishingSpot.waypointY, SelectedFishingSpot.waypointZ, true)
-        end
-        yield("/wait 1")
-        return
-    end
-
-    if GetCharacterCondition(CharacterCondition.mounted) then
-        Dismount()
-        LogInfo("["..ThisScriptName.."] State Change: Dismount")
-        return
-    end
-
-    State = CharacterState.fishing
-    LogInfo("["..ThisScriptName.."] State Change: Fishing")
-end
 
 ResetHardAmissTime = os.clock()
 function Fishing()
-    if GetItemCount(29717) == 0 then
+    if GetItemCount(VersatileLure) == 0 then
         State = CharacterState.buyFishingBait
         LogInfo("State Change: Buy Fishing Bait")
         return
@@ -291,7 +240,7 @@ FishingBaitMerchant =
     }
 }
 function BuyFishingBait()
-    if GetItemCount(29717) >= 1 then
+    if GetItemCount(VersatileLure) >= 1 then
         if IsAddonVisible("Shop") then
             yield("/callback Shop true -1")
         else
@@ -430,120 +379,6 @@ end
 
 --#endregion Movement
 
---#region Collectables
-
-function TurnIn()
-    if GetItemCount(SelectedFish.fishId) == 0 then
-        if IsAddonVisible("CollectablesShop") then
-            yield("/callback CollectablesShop true -1")
-        elseif GetItemCount(GathererScripId) >= ScripExchangeItem.price then
-            State = CharacterState.scripExchange
-            LogInfo(""..ThisScriptName.."] State Change: ScripExchange")
-        else
-            State = CharacterState.ready
-            LogInfo("["..ThisScriptName.."] State Change: Ready")
-        end
-    elseif not IsInZone(SelectedHubCity.zoneId) then
-        State = CharacterState.goToHubCity
-        LogInfo("State Change: GoToHubCity")
-    elseif SelectedHubCity.scripExchange.requiresAethernet and (not IsInZone(SelectedHubCity.aethernet.aethernetZoneId) or
-        GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > DistanceBetween(SelectedHubCity.aethernet.x, SelectedHubCity.aethernet.y, SelectedHubCity.aethernet.z, SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) + 10) then
-        if not LifestreamIsBusy() then
-            yield("/li "..SelectedHubCity.aethernet.aethernetName)
-        end
-        yield("/wait 1")
-    elseif IsAddonVisible("TelepotTown") then
-        LogInfo("TelepotTown open")
-        yield("/callback TelepotTown false -1")
-    elseif GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > 1 then
-        if not (PathfindInProgress() or PathIsRunning()) then
-            LogInfo("Path not running")
-            PathfindAndMoveTo(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z)
-        end
-    elseif GetItemCount(GathererScripId) >= 3800 then
-        if IsAddonVisible("CollectablesShop") then
-            yield("/callback CollectablesShop true -1")
-        else
-            State = CharacterState.scripExchange
-            LogInfo("State Change: ScripExchange")
-        end
-    else
-        if PathfindInProgress() or PathIsRunning() then
-            yield("/vnav stop")
-        end
-
-        if not IsAddonVisible("CollectablesShop") or not IsAddonReady("CollectablesShop") then
-            yield("/target Collectable Appraiser")
-            yield("/wait 0.5")
-            yield("/interact")
-        else
-            yield("/callback CollectablesShop true 12 "..SelectedFish.collectiblesTurnInListIndex)
-            yield("/wait 0.1")
-            yield("/callback CollectablesShop true 15 0")
-            yield("/wait 1")
-        end
-    end
-end
-
-function ScripExchange()
-    if GetItemCount(GathererScripId) < ScripExchangeItem.price then
-        if IsAddonVisible("InclusionShop") then
-            yield("/callback InclusionShop true -1")
-        elseif GetItemCount(SelectedFish.fishId) > 0 then
-            State = CharacterState.turnIn
-            LogInfo("State Change: TurnIn")
-        else
-            State = CharacterState.ready
-            LogInfo("State Change: Ready")
-        end
-    elseif not IsInZone(SelectedHubCity.zoneId) then
-        State = CharacterState.goToHubCity
-        LogInfo("State Change: GoToHubCity")
-    elseif not LogInfo("["..ThisScriptName.."] /li aethernet") and SelectedHubCity.scripExchange.requiresAethernet and (not IsInZone(SelectedHubCity.aethernet.aethernetZoneId) or
-        GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > DistanceBetween(SelectedHubCity.aethernet.x, SelectedHubCity.aethernet.y, SelectedHubCity.aethernet.z, SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) + 10) then
-        if not LifestreamIsBusy() then
-            yield("/li "..SelectedHubCity.aethernet.aethernetName)
-        end
-        yield("/wait 1")
-    elseif not LogInfo("["..ThisScriptName.."] close telepottown") and IsAddonVisible("TelepotTown") then
-        LogInfo("TelepotTown open")
-        yield("/callback TelepotTown false -1")
-    elseif not LogInfo("["..ThisScriptName.."] move to scrip exchange") and GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > 1 then
-        if not (PathfindInProgress() or PathIsRunning()) then
-            LogInfo("Path not running")
-            PathfindAndMoveTo(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z)
-        end
-    elseif not LogInfo("["..ThisScriptName.."] check ShopExchangeItemDialog") and IsAddonVisible("ShopExchangeItemDialog") then
-        if IsAddonReady("ShopExchangeItemDialog") then
-            yield("/callback ShopExchangeItemDialog true 0")
-        end
-    elseif not LogInfo("["..ThisScriptName.."] check SelectIconString") and IsAddonVisible("SelectIconString") then
-        if IsAddonReady("SelectIconString") then
-            LogInfo("["..ThisScriptName.."] SelectIconString Ready")
-            yield("/callback SelectIconString true 0")
-        else
-            LogInfo("["..ThisScriptName.."] SelectIconString Not Ready")
-        end
-    elseif not LogInfo("["..ThisScriptName.."] check InclusionShop") and IsAddonVisible("InclusionShop") then
-        if IsAddonReady("InclusionShop") then
-            yield("/callback InclusionShop true 12 "..ScripExchangeItem.categoryMenu)
-            yield("/wait 1")
-            yield("/callback InclusionShop true 13 "..ScripExchangeItem.subcategoryMenu)
-            yield("/wait 1")
-            yield("/callback InclusionShop true 14 "..ScripExchangeItem.listIndex.." "..math.min(99, GetItemCount(GathererScripId)//ScripExchangeItem.price))
-            yield("/wait 1")
-        end
-    else
-        LogInfo("["..ThisScriptName.."] target and interact with Scrip Exchange")
-        yield("/wait 1")
-        yield("/target Scrip Exchange")
-        yield("/wait 0.5")
-        yield("/interact")
-    end
-end
-
---#endregion Collectables
-
 -- #region Other Tasks
 function ProcessRetainers()
     LogInfo("["..ThisScriptName.."] Handling retainers...")
@@ -638,7 +473,7 @@ function ExecuteRepair()
 
     local hawkersAlleyAethernetShard = { x=-213.95, y=15.99, z=49.35 }
     if SelfRepair then
-        if GetItemCount(33916) > 0 then
+        if GetItemCount(DarkMatter) > 0 then
             if NeedsRepair(RepairAmount) then
                 if not IsAddonVisible("Repair") then
                     LogInfo("["..ThisScriptName.."] Opening repair menu...")
@@ -799,23 +634,23 @@ LastStuckCheckPosition = {x=GetPlayerRawXPos(), y=GetPlayerRawYPos(), z=GetPlaye
 
 SelectedFish = SelectFishTable()
 
-if SelectedFish.fishingSpots.waypoints == nil then
-    SelectedFish.closestAetheryte = GetClosestAetheryte(
+if Achievement.fishingSpots.waypoints == nil then
+    Achievement.closestAetheryte = GetClosestAetheryte(
             SelectedFishingSpot.waypointX,
             SelectedFishingSpot.waypointY,
             SelectedFishingSpot.waypointZ,
-            SelectedFish.zoneId,
+            Achievement.zoneId,
             0)
 else
-    SelectedFish.closestAetheryte = GetClosestAetheryte(
-            SelectedFish.fishingSpots.waypoints[1].x,
-            SelectedFish.fishingSpots.waypoints[1].y,
-            SelectedFish.fishingSpots.waypoints[1].z,
-            SelectedFish.zoneId,
+    Achievement.closestAetheryte = GetClosestAetheryte(
+            Achievement.fishingSpots.waypoints[1].x,
+            Achievement.fishingSpots.waypoints[1].y,
+            Achievement.fishingSpots.waypoints[1].z,
+            Achievement.zoneId,
             0)
 end
 
-if IsInZone(SelectedFish.zoneId) then
+if IsInZone(Achievement.zoneId) then
     SelectNewFishingHole()
 end
 
