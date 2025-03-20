@@ -355,7 +355,8 @@ function Ready()
 end
 
 --[[
-TeleportToFishingZone
+TeleportToFishingZone - Teleport to the zone, making sure we arrive safely before moving on
+
 - If not in the target fishing zone, then
     - teleport to an Aetheryte in that zone
 - If in the target fishing zone, then
@@ -375,13 +376,22 @@ function TeleportToFishingZone()
 end
 
 --[[
-GoToFishingHole
+GoToFishingHole - Travel within the zone to get to the fishing hole
 
-- If not in the target fishing zone, then
+- Check if not in the target fishing zone, if not, then
     - Change state to get to the fishing hole
-- 
-
-
+    - return from function to let state maching continue
+- If stuck in location for > 10 seconds, then adjust position
+- If distance to destination is > 10, then 
+    - Make sure we're mounted
+    - Make sure Pathfind is moving us towards target
+    - return from function to let state maching continue
+- If distance to destination is =< 10 and we're mounted, then
+    - Dismount
+    - return from function to let state maching continue
+- If none of the above triggers, then
+    - We're at destination
+    - Change state to start fishing
 ]]
 function GoToFishingHole()
     if not IsInZone(Achievement.zoneId) then
@@ -439,11 +449,9 @@ end
 
 --[[
 *******************************************
-*******************************************
 *                                         *
 *    Fishing Functions                    *
 *                                         *
-*******************************************
 *******************************************
 ]]
 
