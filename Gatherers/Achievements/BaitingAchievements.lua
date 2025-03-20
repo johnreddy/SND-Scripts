@@ -6,18 +6,26 @@
 ********************************************************************************
 
 Intending to assist in the completion of the following Achievements:
-- A Fisher's Life for Me: Greater Eorzea
-  - Includes "A Fisher's Life for Me: La Noscea"
-    - Includes "Good Things Come to Those Who Bait: La Noscea" I, II, III, IV, V
-  - Includes "A Fisher's Life for Me: Black Shroud"
-    - Includes "Good Things Come to Those Who Bait: Black Shroud" I, II, III, IV, V
-  - Includes "A Fisher's Life for Me: Thanalan"
-    - Includes "Good Things Come to Those Who Bait: Thanalan" I, II, III, IV, V
-- Baiting Heavensward
-- Baiting Stormblood
-- Baiting Shadowbringers
-- Baiting the End
-- Baiting Dawntrail
+ 1 - Good Things Come to Those Who Bait: La Noscea I
+ 2 - Good Things Come to Those Who Bait: La Noscea II
+ 3 - Good Things Come to Those Who Bait: La Noscea III
+ 4 - Good Things Come to Those Who Bait: La Noscea IV
+ 5 - Good Things Come to Those Who Bait: La Noscea V
+ 6 - Good Things Come to Those Who Bait: Black Shroud I
+ 7 - Good Things Come to Those Who Bait: Black Shroud II
+ 8 - Good Things Come to Those Who Bait: Black Shroud III
+ 9 - Good Things Come to Those Who Bait: Black Shroud IV
+10 - Good Things Come to Those Who Bait: Black Shroud V
+11 - Good Things Come to Those Who Bait: Thanalan I
+12 - Good Things Come to Those Who Bait: Thanalan II
+13 - Good Things Come to Those Who Bait: Thanalan III
+14 - Good Things Come to Those Who Bait: Thanalan IV
+15 - Good Things Come to Those Who Bait: Thanalan V
+16 - Baiting Heavensward
+17 - Baiting Stormblood
+18 - Baiting Shadowbringers
+19 - Baiting the End
+20 - Baiting Dawntrail
 
 Concept: Iterate through all of the achievements.  If there's one that hasn't 
 been completed, go to a known fishing site for that achievement, set the Release 
@@ -44,21 +52,33 @@ Inspired by pot0to's FishingGathererScrips - https://github.com/pot0to/pot0to-SN
 ********************************************************************************
 ]]
 
-UseCordials                = false     --If true, will use cordials when fishing
-MoveSpotsAfter             = 30        --Number of minutes to fish at this spot before changing spots.
-ResetHardAmissAfter        = 120       --Number of minutes to farm in current instance before teleporting away and back
+TargetAchievement        = 0 
+--[[ TargetAchievement: If set to 0, then we'll cycle through all the achievements
+     this character has not finished. Otherwise, select the number of the achievement
+     as listed in the section above.  For example, set to 16 for Baiting Heavensward.
+]]
 
-Food                       = ""        --what food to eat
-Potion                     = "Superior Spiritbond Potion <hq>"     --what potion to use
+UseCordials              = false    --If true, will use cordials when fishing
+MoveSpotsAfter           = 30       --Number of minutes to fish at this spot before changing spots.
+ResetHardAmissAfter      = 120      --Number of minutes to farm in current instance before teleporting away and back
+
+Food                     = ""
+Potion                   = ""
+--[[ If you're high enough level, then you won't really need to set Food or Potion.  These determine
+     which consumables we'll be upkeeping.  Append <hq> if you're using high quality consumables.
+     Examples:
+Food                     = "Nasi Goreng <hq>"   -- For more GP while gathering
+Potion                   = "Superior Spiritbond Potion <hq>" -- If you're gathering, you may as well try for more materia
+]]
 
 --things you want to enable
-ExtractMateria             = true      --If true, will extract materia if possible
-ReduceEphemerals           = true      --If true, will reduce ephemerals if possible
-SelfRepair                 = true      --If true, will do repair if possible set repair amount below
-RepairAmount               = 1         --repair threshold, adjust as needed
+ExtractMateria           = true     --If true, will extract materia if possible
+ReduceEphemerals         = true     --If true, will reduce ephemerals if possible
+SelfRepair               = true     --If true, will do repair if possible set repair amount below
+RepairAmount             = 1        --repair threshold, adjust as needed
 
 -- Keep this? Maybe implement breakout for inventory full when processing materia -JR
---MinInventoryFreeSlots      = 1         --set carefully
+--MinInventoryFreeSlots    = 1        --set carefully
 
 --[[
 *******************************************
@@ -73,11 +93,14 @@ RepairAmount               = 1         --repair threshold, adjust as needed
 -- This name will be used whereever logging entries are made.
 ThisScriptName = "BaitingAchievements"
 
--- Grade 8 Dark Matter is current highest, item number 33916
+-- Grade 8 Dark Matter is current highest, its item number
 DarkMatter = 33916
 
--- Versatile Lure is the bait we're using here
+-- Versatile Lure is the bait we're using here, its item number
 VersatileLure = 29717
+
+-- FisherJobNum - As a variable in case patching ever changes job numbers.
+FisherJobNum = 18
 
 --[[
 ARRFishingAchievements - List of Achievements to complete, and where to fish for them.
@@ -91,7 +114,6 @@ ARRFishingAchievements - List of Achievements to complete, and where to fish for
 ]]
 ARRFishingAchievements = 
 {
---[[
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea I",
         AchievementNumber = 259,
@@ -110,6 +132,7 @@ ARRFishingAchievements =
             pointToFace = { x=-66.69, y=45.00, z=-173.75 },
         },
     },
+--[[
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea II",
         AchievementNumber = 261,
@@ -277,7 +300,7 @@ end
 
 -- BreakOut() - exit because we encountered a problem we can't deal with.  Hopefully you'll get some debugging
 function BreakOut(exitstring)
-    yield("/e "..exitstring)
+    yield("/echo "..exitstring)
     yield("/snd stop")
 end
 
@@ -315,6 +338,30 @@ end
 
 
 
+
+
+--[[
+*******************************************
+*                                         *
+*    Fishing Functions                    *
+*                                         *
+*******************************************
+]]
+
+-- SetReleaseList() - we don't want to keep these fish, so set a release list before we start fishing here.
+function SetReleaseList(bitmask)
+    yield("/ac \"Release List\"")
+    yield("/wait 1")
+    yield("/callback FishRelease true 2 "..bitmask.."u "..bitmask.."u")
+    yield("/wait 1")
+    yield("/callback FishRelease true 0")
+    yield("/wait 1")
+    yield("/callback FishRelease true 1")
+    yield("/wait 1")
+end
+
+
+
 --[[
 *******************************************
 *                                         *
@@ -322,37 +369,6 @@ end
 *                                         *
 *******************************************
 ]]
---[[
-Ready - initialize a cycle
-- Make sure food & pots are consumed if needed
-- Make sure player is ready to do something
-- Change state to do one of:
-    - Perform repairs
-    - Extract materia
-    - Check for sufficient bait (and then go buy it if needed)
-    - Go to the fishing hole
-]]
-function Ready()
-    FoodCheck()
-    PotionCheck()
-
-    if not LogInfo("["..ThisScriptName.."] Ready -> IsPlayerAvailable()") and not IsPlayerAvailable() then
-        -- do nothing
-    elseif not LogInfo("["..ThisScriptName.."] Ready -> Repair") and RepairAmount > 0 and NeedsRepair(RepairAmount) and
-        (not shouldWaitForBonusBuff or (SelfRepair and GetItemCount(DarkMatter) > 0)) then
-        State = CharacterState.repair
-        LogInfo("["..ThisScriptName.."] State Change: Repair")
-    elseif not LogInfo("["..ThisScriptName.."] Ready -> ExtractMateria") and ExtractMateria and CanExtractMateria(100) and GetInventoryFreeSlotCount() > 1 then
-        State = CharacterState.extractMateria
-        LogInfo("["..ThisScriptName.."] State Change: ExtractMateria")
-    elseif GetItemCount(VersatileLure) == 0 then
-        State = CharacterState.buyFishingBait
-        LogInfo("["..ThisScriptName.."] tate Change: Buy Fishing Bait")
-    else
-        State = CharacterState.goToFishingHole
-        LogInfo("["..ThisScriptName.."] State Change: GoToFishingHole")
-    end
-end
 
 --[[
 TeleportToFishingZone - Teleport to the zone, making sure we arrive safely before moving on
@@ -446,32 +462,83 @@ function GoToFishingHole()
     LogInfo("["..ThisScriptName.."] State Change: Fishing")
 end
 
-
 --[[
-*******************************************
-*                                         *
-*    Fishing Functions                    *
-*                                         *
-*******************************************
+selectAchievement - Get the achievement(s) to complete, and exit the script when done.
+- If we don't know have a current achievement, use the specifically requested one, or iterated start from the first
+- If the specifically requested one is completed, then exit.
+- Otherwise, iterate through the list until we get one that's not complete yet.  If they're all completed, then exit.
 ]]
-
--- SetReleaseList() - we don't want to keep these fish, so set a release list before we start fishing here.
-function SetReleaseList(bitmask)
-    yield("/ac \"Release List\"")
-    yield("/wait 1")
-    yield("/callback FishRelease true 2 "..bitmask.."u "..bitmask.."u")
-    yield("/wait 1")
-    yield("/callback FishRelease true 0")
-    yield("/wait 1")
-    yield("/callback FishRelease true 1")
-    yield("/wait 1")
+function SelectAchievement()
+    if Achievement == nil and 
+        if TargetAchievement > 0 then
+            CurrentFishingSpot = TargetAchievement
+        else
+            CurrentFishingSpot = 1
+        end
+        Achievement = ARRFishingAchievements[CurrentFishingSpot]
+        return
+    else
+        if IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement > 0 then
+            LogInfo("["..ThisScriptName.."] Specific requested Achievement completed: "..Achievement.AchievementName)
+            StopFlag = true
+            return
+        elseif IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement = 0 then
+            if CurrentFishingSpot == #ARRFishingAchievements
+                LogInfo("["..ThisScriptName.."] All achievements completed")
+                StopFlag = true
+                return
+            else 
+                CurrentFishingSpot = CurrentFishingSpot + 1
+                Achievement = ARRFishingAchievements[CurrentFishingSpot]
+            end
+        end
+    end
+    State = CharacterState.ready
 end
 
+--[[
+Ready - initialize a cycle
+- Make sure food & pots are consumed if needed
+- Make sure player is ready to do something
+- Change state to do one of:
+    - Select Achievement to work (or check completion)
+    - Perform repairs
+    - Extract materia
+    - Check for sufficient bait (and then go buy it if needed)
+    - Go to the fishing hole
+]]
+function Ready()
+    FoodCheck()
+    PotionCheck()
+
+    if not LogInfo("["..ThisScriptName.."] Ready -> IsPlayerAvailable()") and not IsPlayerAvailable() then
+        -- do nothing
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement") and Achievement == nil then
+        State = CharacterState.selectAchievement
+        LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement") and IsAchievementComplete(Achievement.AchievementNumber) then
+        State = CharacterState.selectAchievement
+        LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> Repair") and RepairAmount > 0 and NeedsRepair(RepairAmount) and
+        (not shouldWaitForBonusBuff or (SelfRepair and GetItemCount(DarkMatter) > 0)) then
+        State = CharacterState.repair
+        LogInfo("["..ThisScriptName.."] State Change: Repair")
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> ExtractMateria") and ExtractMateria and CanExtractMateria(100) and GetInventoryFreeSlotCount() > 1 then
+        State = CharacterState.extractMateria
+        LogInfo("["..ThisScriptName.."] State Change: ExtractMateria")
+    elseif GetItemCount(VersatileLure) == 0 then
+        State = CharacterState.buyFishingBait
+        LogInfo("["..ThisScriptName.."] State Change: Buy Fishing Bait")
+    else
+        State = CharacterState.goToFishingHole
+        LogInfo("["..ThisScriptName.."] State Change: GoToFishingHole")
+    end
+end
 
 --[[
 *******************************************
 *                                         *
-*    Main Code                            *
+*    Main Execution                       *
 *                                         *
 *******************************************
 ]]
@@ -485,7 +552,7 @@ DeleteAllAutoHookAnonymousPresets()
 UseAutoHookAnonymousPreset(autohookPreset)
 
 -- Make sure we're a Fisher
-if GetClassJobId() ~= 18 then
+if GetClassJobId() ~= FisherJobNum then
     yield("/gs change Fisher")
     yield("/wait 1")
 end
@@ -493,6 +560,7 @@ end
 -- Prep the state machine
 CharacterState = {
     ready = Ready,
+    selectAchievement = SelectAchievement,
     teleportToFishingZone = TeleportToFishingZone,
     goToFishingHole = GoToFishingHole,
     extractMateria = ExecuteExtractMateria,
@@ -501,21 +569,14 @@ CharacterState = {
     goToHubCity = GoToHubCity,
     buyFishingBait = BuyFishingBait
 }
+StopFlag = false
+State = CharacterState.ready
 
--- Run the state machine for each 
-for _, Achievement in ipairs(ARRFishingAchievements) do
-    if IsAchievementComplete(Achievement.AchievementNumber) then
-        yield("/echo Already Complete: "..Achievement.AchievementName..".")
-    else
-        yield("/echo Starting: "..Achievement.AchievementName..".")
-        State = CharacterState.ready
-        StopFlag = false
-        while not StopFlag and not IsAchievementComplete(Achievement.AchievementNumber) do
-            State()
-            yield("/wait 0.1")
-        end
-        if StopFlag then
-    end
+-- Initialize this to nil so we have something to check against in the state machine
+Achievement = nil
+
+-- Run the state machine
+while not StopFlag do
+    State()
+    yield("/wait 0.1")
 end
-
-
