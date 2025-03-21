@@ -5,7 +5,20 @@
 *                                                                              *
 ********************************************************************************
 
-Intending to assist in the completion of the following Achievements:
+Concept: Iterate through all of the "Baiting" achievements.  If there's one that
+hasn't been completed, go to a known fishing site for that achievement, set the 
+Release List so that you don't run out of inventory space with useless content, 
+fish there using Versatile Lure until you complete the achievement.  Move on to 
+the next unfinished achievement in order until done.  Also provide the option
+for users to select specific Achievements from this list.
+
+Created by: John 'Skip' Reddy
+Inspired by pot0to's FishingGathererScrips - https://github.com/pot0to/pot0to-SND-Scripts
+
+v0.0.1 -> First pass writing/modification of reference code
+
+
+Assisting in the completion of the following Achievements:
  1 - Good Things Come to Those Who Bait: La Noscea I
  2 - Good Things Come to Those Who Bait: La Noscea II
  3 - Good Things Come to Those Who Bait: La Noscea III
@@ -27,16 +40,6 @@ Intending to assist in the completion of the following Achievements:
 19 - Baiting the End
 20 - Baiting Dawntrail
 
-Concept: Iterate through all of the achievements.  If there's one that hasn't 
-been completed, go to a known fishing site for that achievement, set the Release 
-List so that you don't run out of inventory space with useless content, fish 
-there using Versatile Lure until you complete the achievement.  Move on to the 
-next unfinished achievement in order until done.
-
-Created by: John 'Skip' Reddy
-Inspired by pot0to's FishingGathererScrips - https://github.com/pot0to/pot0to-SND-Scripts
-
--> 0.0.1
 
 ********************************************************************************
 *                             Required Plugins                                 *
