@@ -111,7 +111,7 @@ ARRFishingAchievements - List of Achievements to complete, and where to fish for
     zoneName          - What we humans use to identify the zone
     fishingSpots      - Contains travel information for getting to the fishing spots, and various locations at each one
         maxHeight     - Highest you should fly to get around
-        waypoints     - an array of coordinates for possible starting points for fishing
+        waypoints     - an array of coordinates describing a line for possible starting
         pointToFace   - The point at the center of the fishing area
 ]]
 ARRFishingAchievements = 
