@@ -325,6 +325,32 @@ mender = {
     },
 }
 
+-- Various character conditions and their numerical values
+CharacterCondition = {
+    normal=1,
+    mounted=4,
+    gathering=6,
+    casting=27,
+    occupiedInEvent=31,
+    occupiedInQuestEvent=32,
+    occupied=33,
+    boundByDutyDiadem=34,
+    occupiedMateriaExtractionAndRepair=39,
+    gathering42=42,
+    fishing=43,
+    betweenAreas=45,
+    jumping48=48,
+    occupiedSummoningBell=50,
+    jumping61=61,
+    betweenAreasForDuty=51,
+    boundByDuty56=56,
+    mounting57=57,
+    mounting64=64,
+    beingMoved=70,
+    flying=77
+}
+
+
 --[[
 *******************************************
 *                                         *
@@ -465,8 +491,23 @@ function Dismount()
     yield("/wait 1")
 end
 
---[[  - 
--
+
+--[[ GoShopping() - Teleport to the town, use the fastest route to the vendor, buy the item
+The neededItem variable should have the following structure
+    neededItem = {
+            itemNumber = number,
+            itemName = string,
+            vendor = {
+                npcName = string,
+                shopItemEntry = number,
+                x=-number, y=number, z=number,
+                zoneId = number,
+                aetheryte = string,
+                aethernet = {
+                    name = string,
+                    x=-number, y=number, z=number,
+                },
+            },
 ]]
 function GoShopping(neededItem)
     local distanceToMerchant = GetDistanceToPoint(neededItem.vendor.x, neededItem.vendor.y, neededItem.vendor.z)
@@ -513,6 +554,95 @@ function GoShopping(neededItem)
     end
     State = CharacterState.ready
 end
+
+
+--[[ RandomAdjustCoordinates() - randomly select a point within maxDistance of a given point.
+- 
+]]
+function RandomAdjustCoordinates(x, y, z, maxDistance)
+    local angle = math.random() * 2 * math.pi
+    local x_adjust = maxDistance * math.random()
+    local z_adjust = maxDistance * math.random()
+
+    local randomX = x + (x_adjust * math.cos(angle))
+    local randomY = y + maxDistance
+    local randomZ = z + (z_adjust * math.sin(angle))
+
+    return randomX, randomY, randomZ
+end
+
+
+--[[ InterpolateCoordinates() - 
+- 
+]]
+function InterpolateCoordinates(startCoords, endCoords, n)
+    local x = startCoords.x + n * (endCoords.x - startCoords.x)
+    local y = startCoords.y + n * (endCoords.y - startCoords.y)
+    local z = startCoords.z + n * (endCoords.z - startCoords.z)
+    return {waypointX=x, waypointY=y, waypointZ=z}
+end
+
+
+--[[ GetWaypoint() - 
+- TODO: Find out WHY.  This function is lifted from pot0to's FishingGathererScrips.lua.  There's a lot of math here, and I'm not entirely sure of the purpose.
+]]
+function GetWaypoint(coords, n)
+    local total_distance = 0
+    local distances = {}
+
+    -- Calculate distances between each pair of coordinates
+    for i = 1, #coords - 1 do
+        local dx = coords[i + 1].x - coords[i].x
+        local dy = coords[i + 1].y - coords[i].y
+        local dz = coords[i + 1].z - coords[i].z
+        local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
+        table.insert(distances, distance)
+        total_distance = total_distance + distance
+    end
+
+    -- Find the target distance
+    local target_distance = n * total_distance
+
+    -- Walk through the coordinates to find the target coordinates
+    local accumulated_distance = 0
+    for i = 1, #coords - 1 do
+        if accumulated_distance + distances[i] >= target_distance then
+            local remaining_distance = target_distance - accumulated_distance
+            local t = remaining_distance / distances[i]
+            return InterpolateCoordinates(coords[i], coords[i + 1], t)
+        end
+        accumulated_distance = accumulated_distance + distances[i]
+    end
+
+    -- If n is 1 (100%), return the last coordinate
+    return { waypointX=coords[#coords].x, waypointY=coords[#coords].y, waypointZ=coords[#coords].z }
+end
+
+
+
+--[[ SelectNewFishingHole() - Randomly pick one of the predefined waypoints for the target Achievement.
+- 
+]]
+function SelectNewFishingHole()
+    LogInfo("["..ThisScriptName.."] Selecting new fishing hole")
+    -- Select a waypoint at random
+    SelectedFishingSpot = GetWaypoint(Achievement.fishingSpots.waypoints, math.random())
+    SelectedFishingSpot.waypointY = QueryMeshPointOnFloorY(
+        SelectedFishingSpot.waypointX, Achievement.fishingSpots.maxHeight, SelectedFishingSpot.waypointZ, false, 50)
+    -- Record the pointToFace (approximate center of the fishing spot)
+    SelectedFishingSpot.x = Achievement.fishingSpots.pointToFace.x
+    SelectedFishingSpot.y = Achievement.fishingSpots.pointToFace.y
+    SelectedFishingSpot.z = Achievement.fishingSpots.pointToFace.z
+    -- Record when we're starting so that we know when to move on, or check for being stuck
+    SelectedFishingSpot.startTime = os.clock()
+    SelectedFishingSpot.lastStuckCheckPosition = {
+        x=GetPlayerRawXPos(), y=GetPlayerRawYPos(), z=GetPlayerRawZPos()
+    }
+end
+
+
+
+
 
 --[[  - 
 - 
@@ -950,6 +1080,10 @@ end
 *                                         *
 *******************************************
 ]]
+
+-- ResetHardAmissTime - used to make sure we don't spend too long in a zone without teleporting.
+-- Setting at start of Main execution in case we don't actually teleport into the target zone.
+ResetHardAmissTime = os.clock()
 
 -- Make sure that all the plugins we need are installed.
 VerifyPlugins(RequiredPlugins)
