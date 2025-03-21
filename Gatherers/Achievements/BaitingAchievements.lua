@@ -39,7 +39,7 @@ Inspired by pot0to's FishingGathererScrips - https://github.com/pot0to/pot0to-SN
 -> 0.0.1
 
 ********************************************************************************
-*                               Required Plugins                               *
+*                             Required Plugins                                 *
 ********************************************************************************
 
 1. AutoHook
@@ -48,8 +48,9 @@ Inspired by pot0to's FishingGathererScrips - https://github.com/pot0to/pot0to-SN
 4. TeleporterI
 
 ********************************************************************************
-*                                   Settings                                   *
+*                             Local Settings                                   *
 ********************************************************************************
+Set the following variable for your preferences.
 ]]
 
 TargetAchievement        = 0 
@@ -64,26 +65,29 @@ ResetHardAmissAfter     = 120      --Number of minutes to farm in current instan
 
 Food                    = ""
 Potion                  = ""
---[[ If you're high enough level, then you won't really need to set Food or Potion.  These determine
-     which consumables we'll be upkeeping.  Append <hq> if you're using high quality consumables.
+--[[ You don't really need to set Food or Potion.  These determine which consumables we'll be upkeeping.
+     Append <hq> if you're using high quality consumables.
      Examples:
 Food                    = "Nasi Goreng <hq>"   -- For more GP while gathering
 Potion                  = "Superior Spiritbond Potion <hq>" -- If you're gathering, you may as well try for more materia
 ]]
 
---things you want to enable
+-- Some settings you will probably want to have enabled
 ExtractMateria          = true    --If true, will extract materia if possible
-ReduceEphemerals        = true    --If true, will reduce ephemerals if possible
-SelfRepair              = true    --If true, will do repair if possible set repair amount below
-AutoBuy                 = true    --If true, will travel to Limsa to buy Dark Matter and Versatile Lures
+SelfRepair              = true    --If true, will do se;f repair if possible.  If not, it will travel to get repairs.
+AutoBuy                 = true    --If true, will travel to Limsa to buy Dark Matter and Bait
 RepairAmount            = 1       --repair threshold, adjust as needed
-                        
+
+
+
 --[[
-*******************************************
-*                                         *
-*    Standard Variables                   *
-*                                         *
-*******************************************
+********************************************************************************
+*                                                                              *
+*    System Variables                                                          *
+*                                                                              *
+*    Don't mess below here, you could break stuff!                             *
+*                                                                              *
+********************************************************************************
 ]]
 
 -- This name will be used whereever logging entries are made.
@@ -125,76 +129,75 @@ ARRFishingAchievements =
             pointToFace = { x=-66.69, y=45.00, z=-173.75 },
         },
     },
---[[
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea II",
         AchievementNumber = 261,
-        Spot = "",
-        ReleaseBitmask = ,
-        zoneId = 134,
-        zoneName = "",
+        Spot = "Empty Heart",
+        ReleaseBitmask = 511,
+        zoneId = 135,
+        zoneName = "Lower La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
+                { x=13.77, y=35.57, z=662.29 },
+                { x=44.49, y=35.66, z=658.67 },
+                { x=40.13, y=35.54, z=688.14 },
+                { x=14.33, y=35.78, z=698.12 },
             },
-            pointToFace = { x=, y=, z= },
+            pointToFace = { x=23.02, y=35.44, z=674.69 },
         },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea III",
         AchievementNumber = 262,
-        Spot = "",
-        ReleaseBitmask = ,
-        zoneId = 134,
-        zoneName = "",
+        Spot = "South Bloodshore",
+        ReleaseBitmask = 1023,
+        zoneId = 137,
+        zoneName = "Eastern La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
+                { x=576.14, y=8.72, z=561.57 },
+                { x=520.92, y=8.78, z=582.93 },
+                { x=497.78, y=8.73, z=637.05 },
+                { x=504.69, y=8.71, z=695.12 },
             },
-            pointToFace = { x=, y=, z= },
+            pointToFace = { x=573.53, y=8.4, z=651.59 },
         },
-    },    {
+    },
+    {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea IV",
         AchievementNumber = 263,
-        Spot = "",
-        ReleaseBitmask = ,
-        zoneId = 134,
-        zoneName = "",
+        Spot = "North Bloodshore",
+        ReleaseBitmask = 1023,
+        zoneId = 137,
+        zoneName = "Eastern La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
+                { x=535.83, y=9.20, z=159.78 },
+                { x=534.14, y=9.12, z=144.10 },
+                { x=528.76, y=9.04, z=120.08 },
             },
-            pointToFace = { x=, y=, z= },
+            pointToFace = { x=573.04, y=8.43, z=131.18 },
         },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea V",
         AchievementNumber = 264,
-        Spot = "",
+        Spot = "The Ship Graveyard",
         ReleaseBitmask = ,
-        zoneId = 134,
-        zoneName = "",
+        zoneId = 138,
+        zoneName = "Western La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
-                { x=, y=, z= },
+                { x=-358.03, y=-42.18, z=720.94 },
+                { x=-324.69, y=-42.16, z=703.83 },
+                { x=-279.76, y=-42.11, z=707.72 },
+                { x=-249.64, y=-42.25, z=728.09 },
             },
-            pointToFace = { x=, y=, z= },
+            pointToFace = { x=-295.06, y=-42.27, z=728.24 },
         },
     },
     {
@@ -202,7 +205,7 @@ ARRFishingAchievements =
         AchievementNumber = 265,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -220,7 +223,7 @@ ARRFishingAchievements =
         AchievementNumber = 266,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -238,7 +241,7 @@ ARRFishingAchievements =
         AchievementNumber = 267,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -256,7 +259,7 @@ ARRFishingAchievements =
         AchievementNumber = 268,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -274,7 +277,7 @@ ARRFishingAchievements =
         AchievementNumber = 269,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -292,7 +295,7 @@ ARRFishingAchievements =
         AchievementNumber = 271,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -310,7 +313,7 @@ ARRFishingAchievements =
         AchievementNumber = 272,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -323,7 +326,6 @@ ARRFishingAchievements =
             pointToFace = { x=, y=, z= },
         },
     },
-]]
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan III",
         AchievementNumber = 273,
@@ -341,13 +343,12 @@ ARRFishingAchievements =
             pointToFace = { x=15.07, y=-16.25, z=-323.77 },
         },
     },
---[[
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan IV",
         AchievementNumber = 274,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -365,7 +366,7 @@ ARRFishingAchievements =
         AchievementNumber = 275,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -383,7 +384,7 @@ ARRFishingAchievements =
         AchievementNumber = 1311,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -401,7 +402,7 @@ ARRFishingAchievements =
         AchievementNumber = 1858,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -419,7 +420,7 @@ ARRFishingAchievements =
         AchievementNumber = 2290,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -437,7 +438,7 @@ ARRFishingAchievements =
         AchievementNumber = 2938,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -455,7 +456,7 @@ ARRFishingAchievements =
         AchievementNumber = 3477,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = 134,
+        zoneId = ,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
@@ -468,7 +469,6 @@ ARRFishingAchievements =
             pointToFace = { x=, y=, z= },
         },
     },
-]]
 }
 
 -- RequiredPlugins - what we need to actually run this.
@@ -566,18 +566,6 @@ CharacterCondition = {
 *******************************************
 ]]
 
---[[ () - 
--
-]]
-
-
-
---[[ () - 
--
-]]
-
-
-
 --[[ GetClosestAetheryte() - Get the closest Aetheryte (direct line) to the target location in the zone
 -
 ]]
@@ -608,7 +596,6 @@ function GetClosestAetheryte(x, y, z, zoneId, teleportTimePenalty)
 end
 
 
-
 --[[ TeleportTo() - Given an aetheryte name, teleport there
 -
 ]]
@@ -626,6 +613,7 @@ function TeleportTo(aetheryteName)
     end
     yield("/wait 1")
 end
+
 
 --[[ VerifyPlugins() - Check to make sure we have all the plugins we need
 Iterate through the plugins we need.  If none are valid, then stop SND, because needs fixed
@@ -651,6 +639,7 @@ function VerifyPlugins(PluginList)
     end
 end
 
+
 --[[  FoodCheck() - ensure that if a Food item has been specified, it's running
 ]]
 function FoodCheck()
@@ -658,6 +647,7 @@ function FoodCheck()
         yield("/item " .. Food)
     end
 end
+
 
 --[[   PotionCheck() - ensure that if a Potion item has been specified, it's running
 ]]
@@ -679,7 +669,6 @@ function Mount()
     end
     yield("/wait 1")
 end
-
 
 
 --[[  Dismount() - Get off the mount
@@ -826,7 +815,6 @@ function GetWaypoint(coords, n)
 end
 
 
-
 --[[ SelectNewFishingHole() - Randomly pick one of the predefined waypoints for the target Achievement.
 - 
 ]]
@@ -845,38 +833,23 @@ function SelectNewFishingHole()
     SelectedFishingSpot.lastStuckCheckPosition = {
         x=GetPlayerRawXPos(), y=GetPlayerRawYPos(), z=GetPlayerRawZPos()
     }
+    SelectedFishingSpot.active = false
 end
 
 
-
-
-
---[[  - 
-- 
+--[[ SetReleaseList() - we don't want to keep these fish, so set a release list before we start fishing here.
+-
 ]]
-
-
-
---[[
-*******************************************
-*                                         *
-*    Fishing Functions                    *
-*                                         *
-*******************************************
-]]
-
--- SetReleaseList() - we don't want to keep these fish, so set a release list before we start fishing here.
 function SetReleaseList(bitmask)
     yield("/ac \"Release List\"")
-    yield("/wait 1")
-    yield("/callback FishRelease true 2 "..bitmask.."u "..bitmask.."u")
-    yield("/wait 1")
+    yield("/wait 0.3")
+    yield("/callback FishRelease true 2 "..bitmask.." "..bitmask)
+    yield("/wait 0.3")
     yield("/callback FishRelease true 0")
-    yield("/wait 1")
+    yield("/wait 0.3")
     yield("/callback FishRelease true 1")
-    yield("/wait 1")
+    yield("/wait 0.3")
 end
-
 
 
 --[[
@@ -890,35 +863,24 @@ end
 --[[ Fishing() - 
 - 
 ]]
-
 function Fishing()
     if GetItemCount(VersatileLure) == 0 then
         State = CharacterState.buyFishingBait
-        LogInfo("State Change: Buy Fishing Bait")
+        LogInfo("State Change: Fishing -> Buy Fishing Bait")
         return
     end
-
-    if GetInventoryFreeSlotCount() <= MinInventoryFreeSlots then
-        LogInfo("["..ThisScriptName.."] Not enough inventory space")
-        if GetCharacterCondition(CharacterCondition.gathering) then
-            yield("/ac Quit")
-            yield("/wait 1")
-        else
-            State = CharacterState.turnIn
-            LogInfo("State Change: TurnIn")
-        end
-        return
-    end
-
+    
     if os.clock() - ResetHardAmissTime > (ResetHardAmissAfter*60) then
         if GetCharacterCondition(CharacterCondition.gathering) then
             if not GetCharacterCondition(CharacterCondition.fishing) then
                 yield("/ac Quit")
                 yield("/wait 1")
+                yield("/ahoff")
+                yield("/wait 1")
             end
         else
-            State = CharacterState.turnIn
-            LogInfo("["..ThisScriptName.."] State Change: Forced TurnIn to avoid hard amiss")
+            State = CharacterState.teleportToFishingZone
+            LogInfo("["..ThisScriptName.."] State Change: Fishing -> TeleportToFishingZone")
         end
         return
     elseif os.clock() - SelectedFishingSpot.startTime > (MoveSpotsAfter*60) then
@@ -926,6 +888,8 @@ function Fishing()
         if GetCharacterCondition(CharacterCondition.gathering) then
             if not GetCharacterCondition(CharacterCondition.fishing) then
                 yield("/ac Quit")
+                yield("/wait 1")
+                yield("/ahoff")
                 yield("/wait 1")
             end
         else
@@ -967,7 +931,22 @@ function Fishing()
         return
     end
     yield("/ac Cast")
-    yield("/wait 0.5")
+    yield("/wait 0.1")
+    if GetCharacterCondition(CharacterCondition.fishing) and not SelectedFishingSpot.active then
+        -- If we've found a location to fish, immediately stop fishing
+        yield("/ac Quit")
+        yield("/wait 1")
+        -- Set the Realease List so that inventory doesn't fill up.
+        SetReleaseList(Achievement.ReleaseBitmask)
+        yield("/wait 0.1")
+        -- Enable AutoHook
+        yield("/ahon")
+        yield("/wait 0.1")
+        -- Start fishing
+        yield("/ac Cast")
+        SelectedFishingSpot.active = true
+    }
+
 end
 
 
@@ -1193,6 +1172,7 @@ function GoToFishingHole()
         return
     end
     -- Okay we're there, now we can start fishing
+    yield("/ahon")
     State = CharacterState.fishing
     LogInfo("["..ThisScriptName.."] State Change: Fishing")
 end
@@ -1295,8 +1275,7 @@ ResetHardAmissTime = os.clock()
 -- Make sure that all the plugins we need are installed.
 VerifyPlugins(RequiredPlugins)
 
--- Activate Autohook, delete any "anon_*" presents, and then load our preset as "anon_"
-yield("/ahon")
+-- Delete any "anon_*" presents, and then load our preset as "anon_"
 DeleteAllAutoHookAnonymousPresets()
 UseAutoHookAnonymousPreset(autohookPreset)
 
