@@ -80,11 +80,9 @@ RepairAmount            = 1       --repair threshold, adjust as needed
                         
 --[[
 *******************************************
-*******************************************
 *                                         *
 *    Standard Variables                   *
 *                                         *
-*******************************************
 *******************************************
 ]]
 
@@ -103,6 +101,9 @@ ARRFishingAchievements - List of Achievements to complete, and where to fish for
     zoneId            - number for vnavmesh and other plugins to identify the zone
     zoneName          - What we humans use to identify the zone
     fishingSpots      - Contains travel information for getting to the fishing spots, and various locations at each one
+        maxHeight     - Highest you should fly to get around
+        waypoints     - an array of coordinates for possible starting points for fishing
+        pointToFace   - The point at the center of the fishing area
 ]]
 ARRFishingAchievements = 
 {
@@ -130,11 +131,14 @@ ARRFishingAchievements =
         AchievementNumber = 261,
         Spot = "",
         ReleaseBitmask = ,
-        zoneId = ,
+        zoneId = 134,
         zoneName = "",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
                 { x=, y=, z= },
             },
             pointToFace = { x=, y=, z= },
@@ -143,62 +147,181 @@ ARRFishingAchievements =
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea III",
         AchievementNumber = 262,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
-    },
-    {
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
+    },    {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea IV",
         AchievementNumber = 263,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea V",
         AchievementNumber = 264,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud I",
         AchievementNumber = 265,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud II",
         AchievementNumber = 266,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud III",
         AchievementNumber = 267,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud IV",
         AchievementNumber = 268,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud V",
         AchievementNumber = 269,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan I",
         AchievementNumber = 271,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan II",
         AchievementNumber = 272,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
 ]]
     {
@@ -222,44 +345,128 @@ ARRFishingAchievements =
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan IV",
         AchievementNumber = 274,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: Thanalan V",
         AchievementNumber = 275,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Baiting Heavensward",
         AchievementNumber = 1311,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Baiting Stormblood",
         AchievementNumber = 1858,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Baiting Shadowbringers",
         AchievementNumber = 2290,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Baiting the End",
         AchievementNumber = 2938,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
     {
         AchievementName = "Baiting Dawntrail",
         AchievementNumber = 3477,
-        Location = "",
+        Spot = "",
         ReleaseBitmask = ,
+        zoneId = 134,
+        zoneName = "",
+        fishingSpots = {
+            maxHeight = 1024,
+            waypoints = {
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+                { x=, y=, z= },
+            },
+            pointToFace = { x=, y=, z= },
+        },
     },
 ]]
 }
