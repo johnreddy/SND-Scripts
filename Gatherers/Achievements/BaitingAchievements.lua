@@ -58,28 +58,26 @@ TargetAchievement        = 0
      as listed in the section above.  For example, set to 16 for Baiting Heavensward.
 ]]
 
-UseCordials              = false    --If true, will use cordials when fishing
-MoveSpotsAfter           = 30       --Number of minutes to fish at this spot before changing spots.
-ResetHardAmissAfter      = 120      --Number of minutes to farm in current instance before teleporting away and back
+UseCordials             = false    --If true, will use cordials when fishing
+MoveSpotsAfter          = 30       --Number of minutes to fish at this spot before changing spots.
+ResetHardAmissAfter     = 120      --Number of minutes to farm in current instance before teleporting away and back
 
-Food                     = ""
-Potion                   = ""
+Food                    = ""
+Potion                  = ""
 --[[ If you're high enough level, then you won't really need to set Food or Potion.  These determine
      which consumables we'll be upkeeping.  Append <hq> if you're using high quality consumables.
      Examples:
-Food                     = "Nasi Goreng <hq>"   -- For more GP while gathering
-Potion                   = "Superior Spiritbond Potion <hq>" -- If you're gathering, you may as well try for more materia
+Food                    = "Nasi Goreng <hq>"   -- For more GP while gathering
+Potion                  = "Superior Spiritbond Potion <hq>" -- If you're gathering, you may as well try for more materia
 ]]
 
 --things you want to enable
-ExtractMateria           = true     --If true, will extract materia if possible
-ReduceEphemerals         = true     --If true, will reduce ephemerals if possible
-SelfRepair               = true     --If true, will do repair if possible set repair amount below
-RepairAmount             = 1        --repair threshold, adjust as needed
-
--- Keep this? Maybe implement breakout for inventory full when processing materia -JR
---MinInventoryFreeSlots    = 1        --set carefully
-
+ExtractMateria          = true    --If true, will extract materia if possible
+ReduceEphemerals        = true    --If true, will reduce ephemerals if possible
+SelfRepair              = true    --If true, will do repair if possible set repair amount below
+AutoBuy                 = true    --If true, will travel to Limsa to buy Dark Matter and Versatile Lures
+RepairAmount            = 1       --repair threshold, adjust as needed
+                        
 --[[
 *******************************************
 *******************************************
@@ -94,10 +92,10 @@ RepairAmount             = 1        --repair threshold, adjust as needed
 ThisScriptName = "BaitingAchievements"
 
 -- Grade 8 Dark Matter is current highest, its item number
-DarkMatter = 33916
+DarkMatter = 
 
 -- Versatile Lure is the bait we're using here, its item number
-VersatileLure = 29717
+VersatileLure = 
 
 -- FisherJobNum - As a variable in case patching ever changes job numbers.
 FisherJobNum = 18
@@ -277,7 +275,7 @@ RequiredPlugins = {
     "Lifestream",
     "TeleporterPlugin",
     "vnavmesh",
-    "AutoHook"
+    "AutoHook",
 }
 
 -- autohookPreset - Decide which Preset to use via UseCordials.  Only difference is Cordials or no.
@@ -287,56 +285,183 @@ else
     autohookPreset = "AH4_H4sIAAAAAAAACuVWwXLaMBD9lYzOeMY2ssG5EUpoZkiaKWl7yPQg7DVoMBaR5TQ0w793ZVtgGwhpJ7fe7N3V27fa1ZNeySBXYsgylQ3jObl8JaOUzRIYJAm5VDKHDtHOCU9h74yM6wa/3H7QIfeSC8nVhlw6aM1GL2GSRxDtzTp+W2LdChEuNFjx4eqvAsfvd8h4/bCQkC1EghbHthvIb0MXGEGvscI+S2a4yFcnCqOOTVuM3BYjAyKSBEJlKsGFTj3MPc9CyIizpABIn0EaQzO4pOU71DlDy234BzPxjM2LWZKZfNc8W4w2kNUYey1Mz2tidk332BKmCx6rK8aLirUhM4apYuESYRGt6ukhcAOWVrD3THFIQ6gx8tsL/SYjzyyV/DcMmSqHyqT1z+yRX61+WLCEs2V2zZ6F1AANg6mn22nav0KIm4rxjt6mY6cCKbSnp3s4z2+36YrPx2xV7MkgnScgM8NHj5RG7Nn0oNBGjv4WsUYvSrLG8d5x1U17ENNfbH2TqpwrLtIx46nZSQs5TnIJt5BlbI5MCOmQu4ITuROoCRXCZo0WPSJH8CYiU/+Md491wXGGxCIn/GXGwr/nM13jEZUsGeZSQqo+qMoW6ofVepTtQcVHsxdR10KGUJxIDDPNLoyRtlZi6aBclpM1VWKtVYGn86kCXOHUq6ymbyA/prg6XMH2W8qfctC4JLBtJ2I0tGIIHIv2XdcK3G7f8oIui+yQeU4EBPEmPFNfYp0Dj8Pja5FNF7DTgLK6Uxy/Y36UnAQudIQGvBNyxZLPQiw1hNGjH8CW+2OjvVhFfU8rU1kodXqBrrVaPFVSpPP3L3cDv7Z6AnNIIyY3fwvwSeQYa5g3A/xgF7BndzKkQeFI1IPk61OZep7b3YWcytUIeiNbFaendBArQP1F31DkqTL7sHMNWT5f4INlpa8n6qFyH8627dLqXYPNL25B/VET+1JcvaB9eb35otCPECNBZo6+wlPOJUSIrXJ9MepXTnu43jdDrSi7e2pWjgX+BzPRaDzK0zFJe0/P29f2uZ7XxAu8yI2pTy3XjmKL9vyexcI4tiBkodMDD2zHIdufRr2ql/DjzlAKmP4v5bISqzGoixE+NzZKF9PSyx6NZ7OQWYz2Q4vasW8xG/XShnAW0Dj0+n1Gtn8AGG5RFecLAAA="
 end
 
+-- Where to buy fishing bait
+Material = {
+     VersatileLure= {
+        itemNumber = 29717,
+        itemName = "Versatile Lure",
+        vendor = {
+            npcName = "Merchant & Mender",
+            shopItemEntry = 3,
+            x=-398, y=3, z=80,
+            zoneId = 129,
+            aetheryte = "Limsa Lominsa",
+            aethernet = {
+                name = "Arcanists' Guild",
+                x=-336, y=12, z=56,
+            },
+        },
+    },
+    DarkMatter = {
+        itemNumber = 33916,
+        itemName = "Dark Matter Grade 8",
+        vendor = {
+            npcName = "Unsynrael",
+            shopItemEntry = 40,
+            x=-257.71, y=16.19, z=50.11
+            zoneId = 129,
+            aetheryte = "Limsa Lominsa",
+            aethernet = {
+                name = "Hawkers' Alley",
+                x=-213.95, y=15.99, z=49.35
+            },
+        },
+    },
+}
+
+-- Descibe the name and location of the Mender you wish 
+mender = { 
+    npcName="Alistair", 
+    x=-246.87, y=16.19, z=49.83,
+    zoneId = 129,
+    aetheryte = "Limsa Lominsa",
+    aethernet = {
+        name = "Hawkers' Alley",
+        x=-213.95, y=15.99, z=49.35,
+    },
+}
 
 --[[
 *******************************************
-*******************************************
 *                                         *
-*    Control Functions                    *
+*    Support Functions                    *
 *                                         *
-*******************************************
 *******************************************
 ]]
 
--- BreakOut() - exit because we encountered a problem we can't deal with.  Hopefully you'll get some debugging
-function BreakOut(exitstring)
-    yield("/echo "..exitstring)
-    yield("/snd stop")
-end
-
--- VerifyPlugins() - Check to make sure we have all the plugins we need
+--[[ VerifyPlugins() - Check to make sure we have all the plugins we need
+Iterate through the plugins we need.  If none are valid, then stop SND, because needs fixed
+]]
 function VerifyPlugins(PluginList)
-    StopFlag = false
+    BreakOut = false
     MissingList = ""
     for _, plugin in ipairs(RequiredPlugins) do
         if not HasPlugin(plugin) then
-            if StopFlag then
+            if BreakOut then
                 MissingList = MissingList..", "..plugin
             else
                 MissingList = plugin
-                StopFlag = true
+                BreakOut = true
             end
         end
     end
-    if StopFlag then
-        BreakOut("Missing required plugin(s): "..MissingList.."! Stopping script. Please install the required plugin(s) and try again.")
+    if BreakOut then
+        Message="["..ThisScriptName.."] Missing required plugin(s): "..MissingList.."! Stopping script. Please install the required plugin(s) and try again."
+        yield("/echo "..Message)
+        LogInfo(Message)
+        yield("/snd stop")
+    end
+end
+
+--[[  FoodCheck() - ensure that if a Food item has been specified, it's running
+]]
+function FoodCheck()
+    if not HasStatusId(48) and Food ~= "" then
+        yield("/item " .. Food)
+    end
+end
+
+--[[   PotionCheck() - ensure that if a Potion item has been specified, it's running
+]]
+function PotionCheck()
+    if not HasStatusId(49) and Potion ~= "" then
+        yield("/item " .. Potion)
     end
 end
 
 
-
-
---[[
-*******************************************
-*******************************************
-*                                         *
-*    Travel Functions                     *
-*                                         *
-*******************************************
-*******************************************
+--[[  Mount() - Get on a mount
+- If mounted, then jump, else, get on mount roulette
 ]]
+function Mount()
+    if GetCharacterCondition(CharacterCondition.mounted) then
+        yield("/gaction jump")
+    else
+        yield('/gaction "mount roulette"')
+    end
+    yield("/wait 1")
+end
 
 
+
+--[[  Dismount() - Get off the mount
+- If moving courtesy vnav, then stop
+- If mounted in the air or on the ground, dismount
+]]
+function Dismount()
+    if PathIsRunning() or PathfindInProgress() then
+        yield("/vnav stop")
+        return
+    end
+
+    if GetCharacterCondition(CharacterCondition.flying) or GetCharacterCondition(CharacterCondition.mounted) then
+        yield('/ac dismount')
+    end
+    yield("/wait 1")
+end
+
+--[[  - 
+-
+]]
+function GoShopping(neededItem)
+    local distanceToMerchant = GetDistanceToPoint(neededItem.vendor.x, neededItem.vendor.y, neededItem.vendor.z)
+    local distanceViaAethernet = DistanceBetween(neededItem.vendor.aethernet.x, neededItem.aethernet.vendor.y, neededItem.aethernet.vendor.z,neededItem.vendor.x, neededItem.vendor.y, neededItem.vendor.z)
+    -- Get to town
+    if not IsInZone(neededItem.vendor.zoneID) then
+        if Echo == "All" then
+            yield("/echo Out of "..neededItem.itemName.."! Purchasing more from "..neededItem.vendor.aetheryte..".")
+        end
+        TeleportTo(neededItem.vendor.aetheryte)
+        return
+    end
+    -- Grab Aethernet if it's faster
+    if distanceToMerchant > (distanceViaAethernet + 20) then
+        if not LifestreamIsBusy() then
+            yield("/li "..neededItem.vendor.aethernet.name)
+        end
+        return
+    end
+    -- TODO: Identify why multiple scripts use this TelepotTown snippit
+    if IsAddonVisible("TelepotTown") then
+        yield("/callback TelepotTown false -1")
+        return
+    end
+    -- Use pathfinding to get to the merchant
+    if distanceToMerchant > 5 then
+        if not (PathfindInProgress() or PathIsRunning()) then
+            PathfindAndMoveTo(neededItem.vendor.x, neededItem.vendor.y, neededItem.vendor)
+        end
+        return
+    end
+    -- Target the vendor
+    if not HasTarget() or GetTargetName() ~= neededItem.vendor.npcName then
+        yield("/target "..neededItem.vendor.npcName)
+        return
+    end
+    -- Perform the transaction
+    if not GetCharacterCondition(CharacterCondition.occupiedInQuestEvent) then
+        yield("/interact")
+    elseif IsAddonVisible("SelectYesno") then
+        yield("/callback SelectYesno true 0")
+    elseif IsAddonVisible("Shop") then
+        yield("/callback Shop true 0 "..neededItem.vendor.shopItemEntry.." 99 0")
+    end
+    State = CharacterState.ready
+end
+
+--[[  - 
+- 
+]]
 
 
 
@@ -369,6 +494,139 @@ end
 *                                         *
 *******************************************
 ]]
+
+
+
+
+--[[ BuyDarkMatter - 
+- 
+]]
+function BuyDarkMatter()
+    GoShopping(Material.DarkMatter)
+end
+
+--[[ BuyVersatileLure - 
+- 
+]]
+function BuyVersatileLure()
+    GoShopping(Material.VersatileLure)
+end
+
+--[[ ExecuteRepair - If gear needs to be repaired, then do that.
+- 
+]]
+function ExecuteRepair()
+    local distanceToMender = GetDistanceToPoint(mender.x, mender.y, mender.z)
+    local distanceViaAethernet = DistanceBetween(mender.aethernet.x, mender.aethernet.y, mender.aethernet.z,mender.x, mender.y, mender.z)
+
+    if IsAddonVisible("SelectYesno") then
+        yield("/callback SelectYesno true 0")
+        return
+    end
+
+    if IsAddonVisible("Repair") then
+        if not NeedsRepair(RepairAmount) then
+            yield("/callback Repair true -1") -- if you don't need repair anymore, close the menu
+        else
+            yield("/callback Repair true 0") -- select repair
+        end
+        return
+    end
+
+    -- if occupied by repair, then just wait
+    if GetCharacterCondition(CharacterCondition.occupiedMateriaExtractionAndRepair) then
+        LogInfo("["..ThisScriptName.."] Repairing...")
+        yield("/wait 1")
+        return
+    end
+
+    if SelfRepair then
+        if GetItemCount(DarkMatter) > 0 then
+            if NeedsRepair(RepairAmount) then
+                if not IsAddonVisible("Repair") then
+                    LogInfo("["..ThisScriptName.."] Opening repair menu...")
+                    yield("/generalaction repair")
+                end
+            else
+                State = CharacterState.ready
+                LogInfo("["..ThisScriptName.."] State Change: Ready")
+            end
+        else
+            if Echo == "All" then
+                yield("/echo Out of Dark Matter and \"AutoBuy\" is false. Switching to Limsa mender.")
+            end
+            SelfRepair = false
+        end
+    else
+        if NeedsRepair(RepairAmount) then
+            if not IsInZone(mender.zoneID) then
+                TeleportTo(mender.aetheryte)
+                return
+            end
+            
+            if distanceToMender > (distanceViaAethernet + 10) then
+                yield("/li "..mender.aethernet.name)
+                yield("/wait 1") -- give it a moment to register
+            elseif IsAddonVisible("TelepotTown") then
+                yield("/callback TelepotTown false -1")
+            elseif GetDistanceToPoint(mender.x, mender.y, mender.z) > 5 then
+                if not (PathfindInProgress() or PathIsRunning()) then
+                    PathfindAndMoveTo(mender.x, mender.y, mender.z)
+                end
+            else
+                if not HasTarget() or GetTargetName() ~= mender.npcName then
+                    yield("/target "..mender.npcName)
+                elseif not GetCharacterCondition(CharacterCondition.occupiedInQuestEvent) then
+                    yield("/interact")
+                end
+            end
+        else
+            State = CharacterState.ready
+            LogInfo("["..ThisScriptName.."] State Change: Ready")
+        end
+    end
+end
+
+--[[ ExecuteExtractMateria - If there's more than 1 free space in inventory, extract the next available materia.
+- Make sure we're unmounted
+- Make sure we're not doing anything and are able to extact
+- If there's materia to extract and more than one inventory space available then extract one materia
+- If there's no more materia to extract, then change State to Ready
+]]
+function ExecuteExtractMateria()
+    if GetCharacterCondition(CharacterCondition.mounted) then
+        Dismount()
+        LogInfo("["..ThisScriptName.."] State Change: Dismounting")
+        return
+    end
+
+    if GetCharacterCondition(CharacterCondition.occupiedMateriaExtractionAndRepair) then
+        return
+    end
+
+    if CanExtractMateria(100) and GetInventoryFreeSlotCount() > 1 then
+        if not IsAddonVisible("Materialize") then -- open material window
+            yield("/generalaction \"Materia Extraction\"")
+            yield("/wait 1") -- give it a second to stick
+            return
+        end
+
+        LogInfo("["..ThisScriptName.."] Extracting materia...")
+            
+        if IsAddonVisible("MaterializeDialog") then
+            yield("/callback MaterializeDialog true 0")
+        else
+            yield("/callback Materialize true 2 0")
+        end
+    else
+        if IsAddonVisible("Materialize") then
+            yield("/callback Materialize true -1")
+        else
+            State = CharacterState.ready
+            LogInfo("["..ThisScriptName.."] State Change: Ready")
+        end
+    end
+end
 
 --[[
 TeleportToFishingZone - Teleport to the zone, making sure we arrive safely before moving on
@@ -440,7 +698,7 @@ function GoToFishingHole()
     end
 
     if GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ) > 10 then
-        LogInfo(""..ThisScriptName.."] Too far from waypoint! Currently "..GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ).." distance.")
+        LogInfo("["..ThisScriptName.."] Too far from waypoint! Currently "..GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ).." distance.")
         if not GetCharacterCondition(CharacterCondition.mounted) then
             Mount(CharacterState.goToFishingHole)
             LogInfo("State Change: Mounting")
@@ -501,10 +759,12 @@ Ready - initialize a cycle
 - Make sure food & pots are consumed if needed
 - Make sure player is ready to do something
 - Change state to do one of:
-    - Select Achievement to work (or check completion)
+    - Select Achievement to work on
+    - Check for Achievement completion
+    - Check for sufficient bait (and then go buy it if needed)
+    - Check for sufficient dark matter (and then go buy it if needed)
     - Perform repairs
     - Extract materia
-    - Check for sufficient bait (and then go buy it if needed)
     - Go to the fishing hole
 ]]
 function Ready()
@@ -519,6 +779,12 @@ function Ready()
     elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement") and IsAchievementComplete(Achievement.AchievementNumber) then
         State = CharacterState.selectAchievement
         LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
+    elseif AutoBuy and GetItemCount(Material.VersatileLure.itemNumber) == 0 then
+        State = CharacterState.buyVersatileLure)
+        LogInfo("["..ThisScriptName.."] State Change: GoShopping, "..Material.VersatileLure.itemName)
+    elseif AutoBuy and GetItemCount(Material.DarkMatter.itemNumber) < 12 then
+        State = CharacterState.buyDarkMatter
+        LogInfo("["..ThisScriptName.."] State Change: GoShopping, "..Material.DarkMatter.itemName)
     elseif not LogInfo("["..ThisScriptName.."] Ready -> Repair") and RepairAmount > 0 and NeedsRepair(RepairAmount) and
         (not shouldWaitForBonusBuff or (SelfRepair and GetItemCount(DarkMatter) > 0)) then
         State = CharacterState.repair
@@ -526,9 +792,6 @@ function Ready()
     elseif not LogInfo("["..ThisScriptName.."] Ready -> ExtractMateria") and ExtractMateria and CanExtractMateria(100) and GetInventoryFreeSlotCount() > 1 then
         State = CharacterState.extractMateria
         LogInfo("["..ThisScriptName.."] State Change: ExtractMateria")
-    elseif GetItemCount(VersatileLure) == 0 then
-        State = CharacterState.buyFishingBait
-        LogInfo("["..ThisScriptName.."] State Change: Buy Fishing Bait")
     else
         State = CharacterState.goToFishingHole
         LogInfo("["..ThisScriptName.."] State Change: GoToFishingHole")
@@ -567,7 +830,8 @@ CharacterState = {
     repair = ExecuteRepair,
     fishing = Fishing,
     goToHubCity = GoToHubCity,
-    buyFishingBait = BuyFishingBait
+    buyDarkMatter = BuyDarkMatter,
+    buyVersatileLure = BuyVersatileLure,
 }
 StopFlag = false
 State = CharacterState.ready
