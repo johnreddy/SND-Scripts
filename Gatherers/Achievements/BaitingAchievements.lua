@@ -212,7 +212,6 @@ ARRFishingAchievements =
                 { x=52.08, y=-12, z=-37.22 },
                 { x=73.42, y=-12, z=29.91 }, -- Watermill
                 { x=81.09, y=-12, z=37.42 },
-                { x=, y=, z= },
             },
             pointToFace = { x=81.14, y=-12, z=85.49 },
         },
@@ -311,7 +310,7 @@ ARRFishingAchievements =
                 { x=265.05, y=-19.72, z=-132.28 },
                 { x=281.53, y=-19.72, z=-86.03 },
             },
-            pointToFace = { x=,316.14 y=-19.72, z=-115.08 },
+            pointToFace = { x=316.14, y=-19.72, z=-115.08 },
         },
     },
     {
@@ -434,16 +433,15 @@ ARRFishingAchievements =
         AchievementName = "Baiting Dawntrail",
         AchievementNumber = 3477,
         Spot = "Miyakabek'zoma",
-        NumberOfFish = ,
-        zoneId = ,
-        zoneName = "",
+        NumberOfFish = 5,
+        zoneId = 1188,
+        zoneName = "Kozama'uka",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
                 { x=-99.37, y=109.2, z=291.20 },
                 { x=-141.66, y=109.2, z=471.10 },
                 { x=-207.56, y=109.2, z=538.69 },
-                { x=, y=, z= },
             },
             pointToFace = { x=-356.19, y=109.2, z=355.41 },
         },
@@ -488,7 +486,7 @@ Material = {
         vendor = {
             npcName = "Unsynrael",
             shopItemEntry = 40,
-            x=-257.71, y=16.19, z=50.11
+            x=-257.71, y=16.19, z=50.11,
             zoneId = 129,
             aetheryte = "Limsa Lominsa",
             aethernet = {
@@ -925,8 +923,7 @@ function Fishing()
         -- Start fishing
         yield("/ac Cast")
         SelectedFishingSpot.active = true
-    }
-
+    end
 end
 
 
@@ -1164,7 +1161,7 @@ selectAchievement - Get the achievement(s) to complete, and exit the script when
 - Otherwise, iterate through the list until we get one that's not complete yet.  If they're all completed, then exit.
 ]]
 function SelectAchievement()
-    if Achievement == nil and 
+    if Achievement == nil then 
         if TargetAchievement > 0 then
             CurrentFishingSpot = TargetAchievement
         else
@@ -1175,21 +1172,22 @@ function SelectAchievement()
             Achievement.fishingSpots.pointToFace.x,
             Achievement.fishingSpots.pointToFace.y,
             Achievement.fishingSpots.pointToFace.z,
-            Achievement.zoneId
+            Achievement.zoneId)
         return
     else
         if IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement > 0 then
             LogInfo("["..ThisScriptName.."] Specific requested Achievement completed: "..Achievement.AchievementName)
             StopFlag = true
             return
-        elseif IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement = 0 then
-            if CurrentFishingSpot == #ARRFishingAchievements
+        elseif IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement == 0 then
+            if CurrentFishingSpot == #ARRFishingAchievements then
                 LogInfo("["..ThisScriptName.."] All achievements completed")
                 StopFlag = true
                 return
             else 
                 CurrentFishingSpot = CurrentFishingSpot + 1
                 Achievement = ARRFishingAchievements[CurrentFishingSpot]
+                return
             end
         end
     end
@@ -1222,7 +1220,7 @@ function Ready()
         State = CharacterState.selectAchievement
         LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
     elseif AutoBuy and GetItemCount(Material.VersatileLure.itemNumber) == 0 then
-        State = CharacterState.buyFishingBait)
+        State = CharacterState.buyFishingBait
         LogInfo("["..ThisScriptName.."] State Change: GoShopping, "..Material.VersatileLure.itemName)
     elseif AutoBuy and GetItemCount(Material.DarkMatter.itemNumber) < 12 then
         State = CharacterState.buyDarkMatter
