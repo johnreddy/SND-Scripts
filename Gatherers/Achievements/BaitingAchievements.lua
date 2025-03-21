@@ -112,7 +112,7 @@ ARRFishingAchievements - List of Achievements to complete, and where to fish for
     fishingSpots      - Contains travel information for getting to the fishing spots, and various locations at each one
         maxHeight     - Highest you should fly to get around
         waypoints     - an array of coordinates describing a line for possible starting
-        pointToFace   - The point at the center of the fishing area
+        pointToFace   - The point at the center of the fishing area, the point to move towards when starting from the waypoint line
 ]]
 ARRFishingAchievements = 
 {
@@ -120,87 +120,81 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: La Noscea I",
         AchievementNumber = 259,
         Spot = "West Agelyss River",
-        ReleaseBitmask = 127,
+        NumberOfFish = ,
         zoneId = 134,
         zoneName = "Middle La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=-45.90, y=45.59, z=-216.62 },
-                { x=-46.08, y=45.05, z=-182.87 },
-                { x=-76.85, y=44.86, z=-130.74 },
-                { x=-105.57, y=44.95, z=-156.99 },
+                { x=-34.80, y=45.87, z=-203.31 },
+                { x=-53.75, y=45.08, z=-176.26 },
+                { x=-88.09, y=44.98, z=-148.15 },
             },
             pointToFace = { x=-66.69, y=45.00, z=-173.75 },
         },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea II",
-        AchievementNumber = 261,
+        AchievementNumber = 260,
         Spot = "Empty Heart",
-        ReleaseBitmask = 511,
+        NumberOfFish = ,
         zoneId = 135,
         zoneName = "Lower La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=13.77, y=35.57, z=662.29 },
-                { x=44.49, y=35.66, z=658.67 },
-                { x=40.13, y=35.54, z=688.14 },
-                { x=14.33, y=35.78, z=698.12 },
+                { x=21.16, y=35.65, z=697.33 },
+                { x=8.35, y=35.44, z=689.45 },
+                { x=8.22, y=35.44, z=673.76 },
             },
             pointToFace = { x=23.02, y=35.44, z=674.69 },
         },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea III",
-        AchievementNumber = 262,
+        AchievementNumber = 261,
         Spot = "South Bloodshore",
-        ReleaseBitmask = 1023,
+        NumberOfFish = ,
         zoneId = 137,
         zoneName = "Eastern La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=576.14, y=8.72, z=561.57 },
-                { x=520.92, y=8.78, z=582.93 },
-                { x=497.78, y=8.73, z=637.05 },
-                { x=504.69, y=8.71, z=695.12 },
+                { x=566.71, y=8.71, z=581.70 },
+                { x=525.50, y=8.66, z=682.77 },
             },
             pointToFace = { x=573.53, y=8.4, z=651.59 },
         },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea IV",
-        AchievementNumber = 263,
+        AchievementNumber = 2632,
         Spot = "North Bloodshore",
-        ReleaseBitmask = 1023,
+        NumberOfFish = ,
         zoneId = 137,
         zoneName = "Eastern La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=535.83, y=9.20, z=159.78 },
-                { x=534.14, y=9.12, z=144.10 },
-                { x=528.76, y=9.04, z=120.08 },
+                { x=554.80, y=8.72, z=173.22 },
+                { x=533.35, y=8.81, z=118.77 },
             },
             pointToFace = { x=573.04, y=8.43, z=131.18 },
         },
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea V",
-        AchievementNumber = 264,
+        AchievementNumber = 263,
         Spot = "The Ship Graveyard",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = 138,
         zoneName = "Western La Noscea",
         fishingSpots = {
             maxHeight = 1024,
             waypoints = {
-                { x=-358.03, y=-42.18, z=720.94 },
-                { x=-324.69, y=-42.16, z=703.83 },
-                { x=-279.76, y=-42.11, z=707.72 },
-                { x=-249.64, y=-42.25, z=728.09 },
+                { x=-244.92, y=-42.24, z=732.19 },
+                { x=-305.71, y=-42.26, z=706.13 },
+                { x=-344.85, y=-42.22, z=711.24 },
             },
             pointToFace = { x=-295.06, y=-42.27, z=728.24 },
         },
@@ -209,7 +203,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud I",
         AchievementNumber = 265,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -227,7 +221,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud II",
         AchievementNumber = 266,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -245,7 +239,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud III",
         AchievementNumber = 267,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -263,7 +257,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud IV",
         AchievementNumber = 268,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -281,7 +275,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Black Shroud V",
         AchievementNumber = 269,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -299,7 +293,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Thanalan I",
         AchievementNumber = 271,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -317,7 +311,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Thanalan II",
         AchievementNumber = 272,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -335,7 +329,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Thanalan III",
         AchievementNumber = 273,
         Spot = "Burnt Lizard Creek",
-        ReleaseBitmask = 63,
+        NumberOfFish = ,
         zoneId = 146,
         zoneName = "Southern Thanalan",
         fishingSpots = {
@@ -352,7 +346,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Thanalan IV",
         AchievementNumber = 274,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -370,7 +364,7 @@ ARRFishingAchievements =
         AchievementName = "Good Things Come to Those Who Bait: Thanalan V",
         AchievementNumber = 275,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -388,7 +382,7 @@ ARRFishingAchievements =
         AchievementName = "Baiting Heavensward",
         AchievementNumber = 1311,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -406,7 +400,7 @@ ARRFishingAchievements =
         AchievementName = "Baiting Stormblood",
         AchievementNumber = 1858,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -424,7 +418,7 @@ ARRFishingAchievements =
         AchievementName = "Baiting Shadowbringers",
         AchievementNumber = 2290,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -442,7 +436,7 @@ ARRFishingAchievements =
         AchievementName = "Baiting the End",
         AchievementNumber = 2938,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -460,7 +454,7 @@ ARRFishingAchievements =
         AchievementName = "Baiting Dawntrail",
         AchievementNumber = 3477,
         Spot = "",
-        ReleaseBitmask = ,
+        NumberOfFish = ,
         zoneId = ,
         zoneName = "",
         fishingSpots = {
@@ -845,7 +839,8 @@ end
 --[[ SetReleaseList() - we don't want to keep these fish, so set a release list before we start fishing here.
 -
 ]]
-function SetReleaseList(bitmask)
+function SetReleaseList(NumberOfFish)
+    bitmask = math.floor(2^NumberOfFish-1)
     yield("/ac \"Release List\"")
     yield("/wait 0.3")
     yield("/callback FishRelease true 2 "..bitmask.." "..bitmask)
@@ -942,7 +937,7 @@ function Fishing()
         yield("/ac Quit")
         yield("/wait 1")
         -- Set the Realease List so that inventory doesn't fill up.
-        SetReleaseList(Achievement.ReleaseBitmask)
+        SetReleaseList(Achievement.NumberOfFish)
         yield("/wait 0.1")
         -- Enable AutoHook
         yield("/ahon")
