@@ -759,7 +759,9 @@ end
 
 
 --[[ GetWaypoint() - 
-- TODO: Find out WHY.  This function is lifted from pot0to's FishingGathererScrips.lua.  There's a lot of math here, and I'm not entirely sure of the purpose.
+Use the Wayponts defined in the Achievement to describe a line, moving around potential obstacles.
+Select a point on that line where someone can land on and begin the fishing attempt from.  The
+Point on that line is passed as "n", which should be a number between 0 and 1.
 ]]
 function GetWaypoint(coords, n)
     local total_distance = 0
@@ -774,10 +776,8 @@ function GetWaypoint(coords, n)
         table.insert(distances, distance)
         total_distance = total_distance + distance
     end
-
     -- Find the target distance
     local target_distance = n * total_distance
-
     -- Walk through the coordinates to find the target coordinates
     local accumulated_distance = 0
     for i = 1, #coords - 1 do
