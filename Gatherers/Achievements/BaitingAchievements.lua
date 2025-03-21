@@ -91,12 +91,6 @@ RepairAmount            = 1       --repair threshold, adjust as needed
 -- This name will be used whereever logging entries are made.
 ThisScriptName = "BaitingAchievements"
 
--- Grade 8 Dark Matter is current highest, its item number
-DarkMatter = 
-
--- Versatile Lure is the bait we're using here, its item number
-VersatileLure = 
-
 -- FisherJobNum - As a variable in case patching ever changes job numbers.
 FisherJobNum = 18
 
@@ -339,6 +333,67 @@ mender = {
 *******************************************
 ]]
 
+--[[ () - 
+-
+]]
+
+
+
+--[[ () - 
+-
+]]
+
+
+
+--[[ GetClosestAetheryte() - Get the closest Aetheryte (direct line) to the target location in the zone
+-
+]]
+function GetClosestAetheryte(x, y, z, zoneId, teleportTimePenalty)
+    local closestAetheryte = nil
+    local closestTravelDistance = math.maxinteger
+    local zoneAetherytes = GetAetherytesInZone(zoneId)
+    for i=0, zoneAetherytes.Count-1 do
+        local aetheryteId = zoneAetherytes[i]
+        local aetheryteRawPos = GetAetheryteRawPos(aetheryteId)
+        LogInfo(aetheryteRawPos)
+        local distanceAetheryteToPoint = DistanceBetween(aetheryteRawPos.Item1, y, aetheryteRawPos.Item2, x, y, z)
+        local comparisonDistance = distanceAetheryteToPoint + teleportTimePenalty
+        local aetheryteName = GetAetheryteName(aetheryteId)
+        LogInfo("["..ThisScriptName.."] Distance via "..aetheryteName.." adjusted for tp penalty is "..tostring(comparisonDistance))
+
+        if comparisonDistance < closestTravelDistance then
+            LogInfo("["..ThisScriptName.."] Updating closest aetheryte to "..aetheryteName)
+            closestTravelDistance = comparisonDistance
+            closestAetheryte = {
+                aetheryteId = aetheryteId,
+                aetheryteName = aetheryteName
+            }
+        end
+    end
+
+    return closestAetheryte
+end
+
+
+
+--[[ TeleportTo() - Given an aetheryte name, teleport there
+-
+]]
+function TeleportTo(aetheryteName)
+    yield("/tp "..aetheryteName)
+    yield("/wait 1") -- wait for casting to begin
+    while GetCharacterCondition(CharacterCondition.casting) do
+        LogInfo("["..ThisScriptName.."] Casting teleport...")
+        yield("/wait 1")
+    end
+    yield("/wait 1") -- wait for that microsecond in between the cast finishing and the transition beginning
+    while GetCharacterCondition(CharacterCondition.betweenAreas) do
+        LogInfo("["..ThisScriptName.."] Teleporting...")
+        yield("/wait 1")
+    end
+    yield("/wait 1")
+end
+
 --[[ VerifyPlugins() - Check to make sure we have all the plugins we need
 Iterate through the plugins we need.  If none are valid, then stop SND, because needs fixed
 ]]
@@ -417,7 +472,7 @@ function GoShopping(neededItem)
     local distanceToMerchant = GetDistanceToPoint(neededItem.vendor.x, neededItem.vendor.y, neededItem.vendor.z)
     local distanceViaAethernet = DistanceBetween(neededItem.vendor.aethernet.x, neededItem.aethernet.vendor.y, neededItem.aethernet.vendor.z,neededItem.vendor.x, neededItem.vendor.y, neededItem.vendor.z)
     -- Get to town
-    if not IsInZone(neededItem.vendor.zoneID) then
+    if not IsInZone(neededItem.vendor.zoneId) then
         if Echo == "All" then
             yield("/echo Out of "..neededItem.itemName.."! Purchasing more from "..neededItem.vendor.aetheryte..".")
         end
@@ -495,7 +550,88 @@ end
 *******************************************
 ]]
 
+--[[ Fishing() - 
+- 
+]]
 
+function Fishing()
+    if GetItemCount(VersatileLure) == 0 then
+        State = CharacterState.buyFishingBait
+        LogInfo("State Change: Buy Fishing Bait")
+        return
+    end
+
+    if GetInventoryFreeSlotCount() <= MinInventoryFreeSlots then
+        LogInfo("["..ThisScriptName.."] Not enough inventory space")
+        if GetCharacterCondition(CharacterCondition.gathering) then
+            yield("/ac Quit")
+            yield("/wait 1")
+        else
+            State = CharacterState.turnIn
+            LogInfo("State Change: TurnIn")
+        end
+        return
+    end
+
+    if os.clock() - ResetHardAmissTime > (ResetHardAmissAfter*60) then
+        if GetCharacterCondition(CharacterCondition.gathering) then
+            if not GetCharacterCondition(CharacterCondition.fishing) then
+                yield("/ac Quit")
+                yield("/wait 1")
+            end
+        else
+            State = CharacterState.turnIn
+            LogInfo("["..ThisScriptName.."] State Change: Forced TurnIn to avoid hard amiss")
+        end
+        return
+    elseif os.clock() - SelectedFishingSpot.startTime > (MoveSpotsAfter*60) then
+        LogInfo("["..ThisScriptName.."] Switching fishing spots")
+        if GetCharacterCondition(CharacterCondition.gathering) then
+            if not GetCharacterCondition(CharacterCondition.fishing) then
+                yield("/ac Quit")
+                yield("/wait 1")
+            end
+        else
+            SelectNewFishingHole()
+            State = CharacterState.ready
+            LogInfo("["..ThisScriptName.."] State Change: Timeout Ready")
+        end
+        return
+    elseif GetCharacterCondition(CharacterCondition.gathering) then
+        if (PathfindInProgress() or PathIsRunning()) then
+            yield("/vnav stop")
+        end
+        yield("/wait 1")
+        return
+    end
+    
+    if os.clock() - SelectedFishingSpot.startTime > 10 then
+        local x = GetPlayerRawXPos()
+        local y = GetPlayerRawYPos()
+        local z = GetPlayerRawZPos()
+        local lastStuckCheckPosition = SelectedFishingSpot.lastStuckCheckPosition
+        if GetDistanceToPoint(lastStuckCheckPosition.x, lastStuckCheckPosition.y, lastStuckCheckPosition.z) < 2 then
+            LogInfo("["..ThisScriptName.."] Stuck in same spot for over 10 seconds.")
+            if PathfindInProgress() or PathIsRunning() then
+                yield("/vnav stop")
+            end
+            SelectNewFishingHole()
+            State = CharacterState.ready
+            LogInfo("["..ThisScriptName.."] State Change: Stuck Ready")
+            return
+        else
+            SelectedFishingSpot.lastStuckCheckPosition = { x = x, y = y, z = z }
+        end
+    end
+
+    -- run towards fishing hole and cast until the fishing line hits the water
+    if not PathfindInProgress() and not PathIsRunning() then
+        PathMoveTo(SelectedFishingSpot.x, SelectedFishingSpot.y, SelectedFishingSpot.z)
+        return
+    end
+    yield("/ac Cast")
+    yield("/wait 0.5")
+end
 
 
 --[[ BuyDarkMatter - 
@@ -505,25 +641,24 @@ function BuyDarkMatter()
     GoShopping(Material.DarkMatter)
 end
 
---[[ BuyVersatileLure - 
+--[[ BuyFishingBait - 
 - 
 ]]
-function BuyVersatileLure()
+function BuyFishingBait()
     GoShopping(Material.VersatileLure)
 end
+
 
 --[[ ExecuteRepair - If gear needs to be repaired, then do that.
 - 
 ]]
 function ExecuteRepair()
-    local distanceToMender = GetDistanceToPoint(mender.x, mender.y, mender.z)
-    local distanceViaAethernet = DistanceBetween(mender.aethernet.x, mender.aethernet.y, mender.aethernet.z,mender.x, mender.y, mender.z)
-
+    -- Not sure why this is here
     if IsAddonVisible("SelectYesno") then
         yield("/callback SelectYesno true 0")
         return
     end
-
+    -- If Repair window open, try to repair.
     if IsAddonVisible("Repair") then
         if not NeedsRepair(RepairAmount) then
             yield("/callback Repair true -1") -- if you don't need repair anymore, close the menu
@@ -532,14 +667,13 @@ function ExecuteRepair()
         end
         return
     end
-
     -- if occupied by repair, then just wait
     if GetCharacterCondition(CharacterCondition.occupiedMateriaExtractionAndRepair) then
         LogInfo("["..ThisScriptName.."] Repairing...")
         yield("/wait 1")
         return
     end
-
+    -- Open repair window if you're doing a self repair, or close it if we're done
     if SelfRepair then
         if GetItemCount(DarkMatter) > 0 then
             if NeedsRepair(RepairAmount) then
@@ -548,6 +682,7 @@ function ExecuteRepair()
                     yield("/generalaction repair")
                 end
             else
+                -- No more repairs needed.  Go back to Ready state
                 State = CharacterState.ready
                 LogInfo("["..ThisScriptName.."] State Change: Ready")
             end
@@ -558,22 +693,28 @@ function ExecuteRepair()
             SelfRepair = false
         end
     else
+        -- We're not self-repairing, so heading to our selected repair shop
         if NeedsRepair(RepairAmount) then
-            if not IsInZone(mender.zoneID) then
+            if not IsInZone(mender.zoneId) then
                 TeleportTo(mender.aetheryte)
                 return
             end
-            
+            -- We're in town now, get distances to pick the fastest route
+            local distanceToMender = GetDistanceToPoint(mender.x, mender.y, mender.z)
+            local distanceViaAethernet = DistanceBetween(mender.aethernet.x, mender.aethernet.y, mender.aethernet.z,mender.x, mender.y, mender.z)
             if distanceToMender > (distanceViaAethernet + 10) then
                 yield("/li "..mender.aethernet.name)
                 yield("/wait 1") -- give it a moment to register
+            -- TODO: Identify why multiple scripts use this TelepotTown snippit
             elseif IsAddonVisible("TelepotTown") then
                 yield("/callback TelepotTown false -1")
+            -- Keep moving towards the destination
             elseif GetDistanceToPoint(mender.x, mender.y, mender.z) > 5 then
                 if not (PathfindInProgress() or PathIsRunning()) then
                     PathfindAndMoveTo(mender.x, mender.y, mender.z)
                 end
             else
+                -- At the vendor, now open the repair dialog
                 if not HasTarget() or GetTargetName() ~= mender.npcName then
                     yield("/target "..mender.npcName)
                 elseif not GetCharacterCondition(CharacterCondition.occupiedInQuestEvent) then
@@ -581,6 +722,7 @@ function ExecuteRepair()
                 end
             end
         else
+            -- No more repairs needed.  Go back to Ready state
             State = CharacterState.ready
             LogInfo("["..ThisScriptName.."] State Change: Ready")
         end
@@ -594,25 +736,24 @@ end
 - If there's no more materia to extract, then change State to Ready
 ]]
 function ExecuteExtractMateria()
+    -- Make sure we're unmounted
     if GetCharacterCondition(CharacterCondition.mounted) then
         Dismount()
         LogInfo("["..ThisScriptName.."] State Change: Dismounting")
         return
     end
-
+    -- If we're doing something, wait a little bit
     if GetCharacterCondition(CharacterCondition.occupiedMateriaExtractionAndRepair) then
         return
     end
-
+    -- Open materia extraction window and start extracting until there's nothing left to extract
     if CanExtractMateria(100) and GetInventoryFreeSlotCount() > 1 then
         if not IsAddonVisible("Materialize") then -- open material window
             yield("/generalaction \"Materia Extraction\"")
             yield("/wait 1") -- give it a second to stick
             return
         end
-
         LogInfo("["..ThisScriptName.."] Extracting materia...")
-            
         if IsAddonVisible("MaterializeDialog") then
             yield("/callback MaterializeDialog true 0")
         else
@@ -673,7 +814,6 @@ function GoToFishingHole()
         LogInfo("["..ThisScriptName.."] TeleportToFishingZone")
         return
     end
-
     -- if stuck for over 10s, adjust
     local now = os.clock()
     if now - SelectedFishingSpot.startTime > 10 then
@@ -696,7 +836,7 @@ function GoToFishingHole()
             SelectedFishingSpot.lastStuckCheckPosition = { x = x, y = y, z = z }
         end
     end
-
+    -- Get mounted, move closer to destination
     if GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ) > 10 then
         LogInfo("["..ThisScriptName.."] Too far from waypoint! Currently "..GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ).." distance.")
         if not GetCharacterCondition(CharacterCondition.mounted) then
@@ -709,13 +849,13 @@ function GoToFishingHole()
         yield("/wait 1")
         return
     end
-
+    -- At destination, unmount
     if GetCharacterCondition(CharacterCondition.mounted) then
         Dismount()
         LogInfo("["..ThisScriptName.."] State Change: Dismount")
         return
     end
-
+    -- Okay we're there, now we can start fishing
     State = CharacterState.fishing
     LogInfo("["..ThisScriptName.."] State Change: Fishing")
 end
@@ -734,6 +874,11 @@ function SelectAchievement()
             CurrentFishingSpot = 1
         end
         Achievement = ARRFishingAchievements[CurrentFishingSpot]
+        Achievement.closestAetheryte = GetClosestAetheryte(
+            Achievement.fishingSpots.pointToFace.x,
+            Achievement.fishingSpots.pointToFace.y,
+            Achievement.fishingSpots.pointToFace.z,
+            Achievement.zoneId
         return
     else
         if IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement > 0 then
@@ -780,7 +925,7 @@ function Ready()
         State = CharacterState.selectAchievement
         LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
     elseif AutoBuy and GetItemCount(Material.VersatileLure.itemNumber) == 0 then
-        State = CharacterState.buyVersatileLure)
+        State = CharacterState.buyFishingBait)
         LogInfo("["..ThisScriptName.."] State Change: GoShopping, "..Material.VersatileLure.itemName)
     elseif AutoBuy and GetItemCount(Material.DarkMatter.itemNumber) < 12 then
         State = CharacterState.buyDarkMatter
@@ -831,7 +976,7 @@ CharacterState = {
     fishing = Fishing,
     goToHubCity = GoToHubCity,
     buyDarkMatter = BuyDarkMatter,
-    buyVersatileLure = BuyVersatileLure,
+    buyFishingBait = BuyFishingBait,
 }
 StopFlag = false
 State = CharacterState.ready
