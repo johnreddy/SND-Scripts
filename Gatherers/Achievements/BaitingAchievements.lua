@@ -168,7 +168,7 @@ ARRFishingAchievements =
     },
     {
         AchievementName = "Good Things Come to Those Who Bait: La Noscea IV",
-        AchievementNumber = 2632,
+        AchievementNumber = 262,
         Spot = "North Bloodshore",
         NumberOfFish = 10,
         zoneId = 137,
