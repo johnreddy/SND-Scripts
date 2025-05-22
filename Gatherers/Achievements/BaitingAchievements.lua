@@ -1215,10 +1215,10 @@ function Ready()
         -- do nothing
     elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement") and Achievement == nil then
         State = CharacterState.selectAchievement
-        LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
-    elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement, need a new one") and IsAchievementComplete(Achievement.AchievementNumber) then
+        LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement, select first")
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement") and IsAchievementComplete(Achievement.AchievementNumber) then
         State = CharacterState.selectAchievement
-        LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
+        LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement, need a new one")
     elseif AutoBuy and GetItemCount(Material.VersatileLure.itemNumber) == 0 then
         State = CharacterState.buyFishingBait
         LogInfo("["..ThisScriptName.."] State Change: GoShopping, "..Material.VersatileLure.itemName)
