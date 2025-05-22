@@ -820,6 +820,7 @@ end
 ]]
 function SetReleaseList(NumberOfFish)
     bitmask = math.floor(2^NumberOfFish-1)
+    yield("/wait 1")
     yield("/ac \"Release List\"")
     yield("/wait 1")
     yield("/callback FishRelease true 2 "..bitmask.." "..bitmask)
@@ -1175,12 +1176,6 @@ function SelectAchievement()
             CurrentFishingSpot = 1
         end
         Achievement = ARRFishingAchievements[CurrentFishingSpot]
-        Achievement.closestAetheryte = GetClosestAetheryte(
-            Achievement.fishingSpots.pointToFace.x,
-            Achievement.fishingSpots.pointToFace.y,
-            Achievement.fishingSpots.pointToFace.z,
-            Achievement.zoneId,
-            0)
         LogInfo("Selected Achievement: "..Achievement.AchievementName)
         return
     else
@@ -1196,12 +1191,6 @@ function SelectAchievement()
             else 
                 CurrentFishingSpot = CurrentFishingSpot + 1
                 Achievement = ARRFishingAchievements[CurrentFishingSpot]
-                Achievement.closestAetheryte = GetClosestAetheryte(
-                    Achievement.fishingSpots.pointToFace.x,
-                    Achievement.fishingSpots.pointToFace.y,
-                    Achievement.fishingSpots.pointToFace.z,
-                    Achievement.zoneId,
-                    0)
                 LogInfo("Selected Achievement: "..Achievement.AchievementName)
                 return
             end
@@ -1267,6 +1256,16 @@ ResetHardAmissTime = os.clock()
 
 -- Make sure that all the plugins we need are installed.
 VerifyPlugins(RequiredPlugins)
+
+-- Set Closest Aetheryte for all Fishing locations
+for i=1,#ARRFishingAchievements do
+    ARRFishingAchievements[i].closestAetheryte = GetClosestAetheryte(
+            ARRFishingAchievements[i].fishingSpots.pointToFace.x,
+            ARRFishingAchievements[i].fishingSpots.pointToFace.y,
+            ARRFishingAchievements[i].fishingSpots.pointToFace.z,
+            ARRFishingAchievements[i].zoneId,
+            0)
+end 
 
 -- Delete any "anon_*" presents, and then load our preset as "anon_"
 DeleteAllAutoHookAnonymousPresets()
