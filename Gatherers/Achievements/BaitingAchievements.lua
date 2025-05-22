@@ -1173,7 +1173,8 @@ function SelectAchievement()
             Achievement.fishingSpots.pointToFace.x,
             Achievement.fishingSpots.pointToFace.y,
             Achievement.fishingSpots.pointToFace.z,
-            Achievement.zoneId)
+            Achievement.zoneId,
+            0)
         return
     else
         if IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement > 0 then
