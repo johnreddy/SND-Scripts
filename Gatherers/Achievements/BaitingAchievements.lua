@@ -79,7 +79,7 @@ Potion                  = "Superior Spiritbond Potion <hq>" -- If you're gatheri
 ExtractMateria          = true    --If true, will extract materia if possible
 SelfRepair              = true    --If true, will do se;f repair if possible.  If not, it will travel to get repairs.
 AutoBuy                 = true    --If true, will travel to Limsa to buy Dark Matter and Bait
-RepairAmount            = 1       --repair threshold, adjust as needed
+RepairAmount            = 20       --repair threshold, adjust as needed
 
 
 
@@ -1216,7 +1216,7 @@ function Ready()
     elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement") and Achievement == nil then
         State = CharacterState.selectAchievement
         LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
-    elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement") and IsAchievementComplete(Achievement.AchievementNumber) then
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> SelectAchievement, need a new one") and IsAchievementComplete(Achievement.AchievementNumber) then
         State = CharacterState.selectAchievement
         LogInfo("["..ThisScriptName.."] State Change: Selecting Achievement")
     elseif AutoBuy and GetItemCount(Material.VersatileLure.itemNumber) == 0 then
@@ -1225,8 +1225,7 @@ function Ready()
     elseif AutoBuy and GetItemCount(Material.DarkMatter.itemNumber) < 12 then
         State = CharacterState.buyDarkMatter
         LogInfo("["..ThisScriptName.."] State Change: GoShopping, "..Material.DarkMatter.itemName)
-    elseif not LogInfo("["..ThisScriptName.."] Ready -> Repair") and RepairAmount > 0 and NeedsRepair(RepairAmount) and
-        (not shouldWaitForBonusBuff or (SelfRepair and GetItemCount(DarkMatter) > 0)) then
+    elseif not LogInfo("["..ThisScriptName.."] Ready -> Repair") and RepairAmount > 0 and NeedsRepair(RepairAmount) then
         State = CharacterState.repair
         LogInfo("["..ThisScriptName.."] State Change: Repair")
     elseif not LogInfo("["..ThisScriptName.."] Ready -> ExtractMateria") and ExtractMateria and CanExtractMateria(100) and GetInventoryFreeSlotCount() > 1 then
