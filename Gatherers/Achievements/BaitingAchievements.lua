@@ -821,7 +821,7 @@ end
 function SetReleaseList(NumberOfFish)
     bitmask = math.floor(2^NumberOfFish-1)
     yield("/ac \"Release List\"")
-    yield("/wait 0.3")
+    yield("/wait 1")
     yield("/callback FishRelease true 2 "..bitmask.." "..bitmask)
     yield("/wait 0.3")
     yield("/callback FishRelease true 0")
@@ -843,9 +843,9 @@ end
 - 
 ]]
 function Fishing()
-    if GetItemCount(VersatileLure) == 0 then
-        State = CharacterState.buyFishingBait
+    if GetItemCount(Material.VersatileLure.itemNumber) == 0 then
         LogInfo("State Change: Fishing -> Buy Fishing Bait")
+        State = CharacterState.buyFishingBait
         return
     end
     
@@ -884,7 +884,8 @@ function Fishing()
         yield("/wait 1")
         return
     end
-    
+
+    LogInfo("Checking to see if stuck")
     if os.clock() - SelectedFishingSpot.startTime > 10 then
         local x = GetPlayerRawXPos()
         local y = GetPlayerRawYPos()
@@ -905,24 +906,28 @@ function Fishing()
     end
 
     -- run towards fishing hole and cast until the fishing line hits the water
+    LogInfo("-- run towards fishing hole and cast until the fishing line hits the water")
     if not PathfindInProgress() and not PathIsRunning() then
         PathMoveTo(SelectedFishingSpot.x, SelectedFishingSpot.y, SelectedFishingSpot.z)
         return
     end
     yield("/ac Cast")
     yield("/wait 0.1")
+    LogInfo("We've found somewhere to fish")
     if GetCharacterCondition(CharacterCondition.fishing) and not SelectedFishingSpot.active then
         -- If we've found a location to fish, immediately stop fishing
-        yield("/ac Quit")
         yield("/wait 1")
+        yield("/ahoff")
+        yield("/wait 1")
+        yield("/ac Rest")
+        yield("/wait 2")
         -- Set the Realease List so that inventory doesn't fill up.
         SetReleaseList(Achievement.NumberOfFish)
-        yield("/wait 0.1")
-        -- Enable AutoHook
+        -- Enable AutoHook, and start.
         yield("/ahon")
+        yield("/wait 0.3")
+        yield("/ahstart")
         yield("/wait 0.1")
-        -- Start fishing
-        yield("/ac Cast")
         SelectedFishingSpot.active = true
     end
 end
@@ -1107,6 +1112,8 @@ function GoToFishingHole()
         State = CharacterState.teleportToFishingZone
         LogInfo("["..ThisScriptName.."] TeleportToFishingZone")
         return
+    else
+        SelectNewFishingHole()
     end
     -- if stuck for over 10s, adjust
     local now = os.clock()
@@ -1131,7 +1138,7 @@ function GoToFishingHole()
         end
     end
     -- Get mounted, move closer to destination
-    if GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ) > 10 then
+    if GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ) > 11 then
         LogInfo("["..ThisScriptName.."] Too far from waypoint! Currently "..GetDistanceToPoint(SelectedFishingSpot.waypointX, GetPlayerRawYPos(), SelectedFishingSpot.waypointZ).." distance.")
         if not GetCharacterCondition(CharacterCondition.mounted) then
             Mount(CharacterState.goToFishingHole)
@@ -1145,14 +1152,13 @@ function GoToFishingHole()
     end
     -- At destination, unmount
     if GetCharacterCondition(CharacterCondition.mounted) then
+        LogInfo("["..ThisScriptName.."] Action: Dismount")
         Dismount()
-        LogInfo("["..ThisScriptName.."] State Change: Dismount")
         return
     end
     -- Okay we're there, now we can start fishing
-    yield("/ahon")
+    LogInfo("["..ThisScriptName.."] State Change: GoToFishingHole -> Fishing")
     State = CharacterState.fishing
-    LogInfo("["..ThisScriptName.."] State Change: Fishing")
 end
 
 --[[
@@ -1175,6 +1181,7 @@ function SelectAchievement()
             Achievement.fishingSpots.pointToFace.z,
             Achievement.zoneId,
             0)
+        LogInfo("Selected Achievement: "..Achievement.AchievementName)
         return
     else
         if IsAchievementComplete(Achievement.AchievementNumber) and TargetAchievement > 0 then
@@ -1189,6 +1196,13 @@ function SelectAchievement()
             else 
                 CurrentFishingSpot = CurrentFishingSpot + 1
                 Achievement = ARRFishingAchievements[CurrentFishingSpot]
+                Achievement.closestAetheryte = GetClosestAetheryte(
+                    Achievement.fishingSpots.pointToFace.x,
+                    Achievement.fishingSpots.pointToFace.y,
+                    Achievement.fishingSpots.pointToFace.z,
+                    Achievement.zoneId,
+                    0)
+                LogInfo("Selected Achievement: "..Achievement.AchievementName)
                 return
             end
         end
