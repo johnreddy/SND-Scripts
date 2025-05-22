@@ -17,7 +17,7 @@ Created by: John 'Skip' Reddy
 Inspired by pot0to's FishingGathererScrips - https://github.com/pot0to/pot0to-SND-Scripts
 
 v0.0.1 -> First pass writing/modification of reference code
-
+v0.9.0 -> First testing version.
 
 Assisting in the completion of the following Achievements:
  1 - Good Things Come to Those Who Bait: La Noscea I
