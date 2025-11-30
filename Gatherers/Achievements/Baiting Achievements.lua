@@ -476,4 +476,222 @@ ARRFishingAchievements =
 }    
 
 SelfRepair                      = Config.Get("Self repair?")
+
+
+
+
+
+
+
+
+--#region Main
+
+CharacterState = {
+    ready                   = Ready,
+    dead                    = HandleDeath,
+    unexpectedCombat        = HandleUnexpectedCombat,
+    mounting                = MountState,
+    npcDismount             = NpcDismount,
+    MiddleOfFateDismount    = MiddleOfFateDismount,
+    moveToFate              = MoveToFate,
+    interactWithNpc         = InteractWithFateNpc,
+    collectionsFateTurnIn   = CollectionsFateTurnIn,
+    doFate                  = DoFate,
+    waitForContinuation     = WaitForContinuation,
+    changingInstances       = ChangeInstance,
+    changeInstanceDismount  = ChangeInstanceDismount,
+    flyBackToAetheryte      = FlyBackToAetheryte,
+    extractMateria          = ExtractMateria,
+    repair                  = Repair,
+    exchangingVouchers      = ExecuteBicolorExchange,
+    processRetainers        = ProcessRetainers,
+    gcTurnIn                = GrandCompanyTurnIn,
+    summonChocobo           = SummonChocobo,
+    autoBuyGysahlGreens     = AutoBuyGysahlGreens
+}
+
+--- Fate state enum mapping (values confirmed from FFXIV SND)
+FateState = {
+    None       = 0,  -- no state / unknown
+    Preparing  = 1,  -- fate is setting up
+    Waiting    = 2,  -- waiting before spawn
+    Spawning   = 3,  -- mobs/NPCs spawning
+    Running    = 4,  -- fate active and in progress
+    Ending     = 5,  -- fate nearing completion
+    Ended      = 6,  -- fate finished successfully
+    Failed     = 7   -- fate failed
+}
+
+-- Settings Area
+-- Buffs
+Food                            = Config.Get("Food")
+Potion                          = Config.Get("Potion")
+
+-- Chocobo
+ResummonChocoboTimeLeft            = 3 * 60        --Resummons chocobo if there's less than this many seconds left on the timer, so it doesn't disappear on you in the middle of a fate.
+ChocoboStance                   = Config.Get("Chocobo Companion Stance") -- Options: Follow, Free, Defender, Healer, Attacker, None. Do not summon if None.
+ShouldSummonChocobo =  ChocoboStance == "Follow"
+                    or ChocoboStance == "Free"
+                    or ChocoboStance == "Defender"
+                    or ChocoboStance == "Healer"
+                    or ChocoboStance == "Attacker"
+ShouldAutoBuyGysahlGreens       = Config.Get("Buy Gysahl Greens?")
+MountToUse                      = "mount roulette"       --The mount youd like to use when flying between fates
+
+-- Retainer
+
+
+
+
   
+
+
+-- Variable initialzization
+StopScript                      = false
+MovingAnnouncementLock          = false
+LastTeleportTimeStamp           = 0
+LastStuckCheckTime              = os.clock()
+LastStuckCheckPosition          = Player.Entity.Position
+MainClass                       = Player.Job
+
+--Post Fate Settings
+MinWait                        = 3          --Min number of seconds it should wait until mounting up for next fate.
+MaxWait                        = 10         --Max number of seconds it should wait until mounting up for next fate.
+    --Actual wait time will be a randomly generated number between MinWait and MaxWait.
+RemainingDurabilityToRepair    = 10         --the amount it needs to drop before Repairing (set it to 0 if you don't want it to repair)
+ShouldAutoBuyDarkMatter        = true       --Automatically buys a 99 stack of Grade 8 Dark Matter from the Limsa gil vendor if you're out
+ShouldExtractMateria           = true       --should it Extract Materia
+
+-- Config settings
+SelfRepair                      = Config.Get("Self repair?")
+--Retainers                       = Config.Get("Pause for retainers?")
+--Echo                            = string.lower(Config.Get("Echo logs"))
+
+-- Plugin warnings
+--[[
+if Retainers and not HasPlugin("AutoRetainer") then
+    Retainers = false
+    yield("/echo [FATE] Warning: you have enabled the feature to process retainers, but you do not have AutoRetainer installed.")
+end
+
+if ShouldGrandCompanyTurnIn and not HasPlugin("AutoRetainer") then
+    ShouldGrandCompanyTurnIn = false
+    yield("/echo [FATE] Warning: you have enabled the feature to process GC turn ins, but you do not have AutoRetainer installed.")
+end
+]]
+
+-- Functions
+
+--Set selected zone
+SelectedAchievement = SelectNextAchievement()
+if SelectedAchievement.zoneName ~= "" and Echo == "all" then
+    yield("/echo ["..ThisScriptName.."] Fishing at "..SelectedAchievement.spot.."in "..SelectedAchievement.zoneName)
+end
+Dalamud.Log("["..ThisScriptName.."] Fishing at "..SelectedAchievement.spot.."in "..SelectedAchievement.zoneName)
+
+if ShouldExchangeBicolorGemstones ~= false then
+    for _, shop in ipairs(BicolorExchangeData) do
+        for _, item in ipairs(shop.shopItems) do
+            if item.itemName == ItemToPurchase then
+                SelectedBicolorExchangeData = {
+                    shopKeepName = shop.shopKeepName,
+                    zoneId = shop.zoneId,
+                    aetheryteName = shop.aetheryteName,
+                    miniAethernet = shop.miniAethernet,
+                    position = shop.position,
+                    item = item
+                }
+            end
+        end
+    end
+    if SelectedBicolorExchangeData == nil then
+        yield("/echo [FATE] Cannot recognize bicolor shop item "..ItemToPurchase.."! Please make sure it's in the BicolorExchangeData table!")
+        StopScript = true
+    end
+end
+
+if InActiveFate() then
+    CurrentFate = BuildFateTable(Fates.GetNearestFate())
+end
+
+if ShouldSummonChocobo and GetBuddyTimeRemaining() > 0 then
+    yield('/cac "'..ChocoboStance..' stance"')
+end
+
+Dalamud.Log("[FATE] Starting fate farming script.")
+
+State = CharacterState.ready
+CurrentFate = nil
+
+if CompanionScriptMode then
+    yield("/echo The companion script will overwrite changing instances.")
+    EnableChangeInstance = false
+end
+
+while not StopScript do
+    local nearestFate = Fates.GetNearestFate()
+    if not IPC.vnavmesh.IsReady() then
+        yield("/echo [FATE] Waiting for vnavmesh to build...")
+        Dalamud.Log("[FATE] Waiting for vnavmesh to build...")
+        repeat
+            yield("/wait 1")
+        until IPC.vnavmesh.IsReady()
+    end
+    if State ~= CharacterState.dead and Svc.Condition[CharacterCondition.dead] then
+        State = CharacterState.dead
+        Dalamud.Log("[FATE] State Change: Dead")
+    elseif not Player.IsMoving then
+        if State ~= CharacterState.unexpectedCombat
+        and State ~= CharacterState.doFate
+        and State ~= CharacterState.waitForContinuation
+        and State ~= CharacterState.collectionsFateTurnIn
+        and Svc.Condition[CharacterCondition.inCombat]
+        and (
+            not InActiveFate()
+            or (InActiveFate() and IsCollectionsFate(nearestFate.Name) and nearestFate.Progress == 100)
+            )
+        then
+            State = CharacterState.unexpectedCombat
+            Dalamud.Log("[FATE] State Change: UnexpectedCombat")
+        end
+    end
+
+    BicolorGemCount = Inventory.GetItemCount(26807)
+
+    if WaitingForFateRewards ~= nil then
+        local state = WaitingForFateRewards.fateObject and WaitingForFateRewards.fateObject.State or nil
+        if WaitingForFateRewards.fateObject == nil
+            or state == nil
+            or state == FateState.Ended
+            or state == FateState.Failed
+        then
+            local msg = "[FATE] WaitingForFateRewards.fateObject is nil or fate state ("..tostring(state)..") indicates fate is finished for fateId: "..tostring(WaitingForFateRewards.fateId)..". Clearing it."
+            Dalamud.Log(msg)
+            if Echo == "all" then
+                yield("/echo "..msg)
+            end
+            WaitingForFateRewards = nil
+        else
+            local msg = "[FATE] Not clearing WaitingForFateRewards: fate state="..tostring(state)..", expected one of [Ended: "..tostring(FateState.Ended)..", Failed: "..tostring(FateState.Failed).."] or nil."
+            Dalamud.Log(msg)
+            if Echo == "all" then
+                yield("/echo "..msg)
+            end
+        end
+    end
+    if not (Svc.Condition[CharacterCondition.betweenAreas]
+        or Svc.Condition[CharacterCondition.occupiedMateriaExtractionAndRepair]
+        or IPC.Lifestream.IsBusy())
+        then
+            State()
+    end
+    yield("/wait 0.25")
+end
+yield("/vnav stop")
+
+if Player.Job.Id ~= MainClass.Id then
+    yield("/gs change "..MainClass.Name)
+end
+
+yield("/echo [Fate] Loop Ended !!")
+--#endregion Main
