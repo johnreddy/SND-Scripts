@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: baanderson40 || orginially pot0to
-version: 3.1.7a
+version: 3.1.7b
 description: |
   Support via https://ko-fi.com/baanderson40
   Fate farming script with the following features:
@@ -160,7 +160,7 @@ configs:
 ********************************************************************************
 *                                  Changelog                                   *
 ********************************************************************************
-           a    Adding more in The Azim Steppe
+           b    Adding more in The Azim Steppe
     -> 3.1.7    Adding Stormblood fates
     -> 3.1.6    Added multiple ARR fate definitions
     -> 3.1.5    Added HW fate definitions
