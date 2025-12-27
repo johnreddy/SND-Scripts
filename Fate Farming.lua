@@ -719,18 +719,23 @@ FatesData = {
             collectionsFates= {
                 { fateName="Showing The Recruits What For", npcName="Storm Commander Bharbennsyn" },
                 { fateName="Get Sharp", npcName="M Tribe Youth" },
+                { fateName="A Pain in the Neck", npcName="Vira Beadmaid" },
             },
             otherNpcFates= {
                 { fateName="The Mail Must Get Through", npcName="Storm Herald" },
                 { fateName="The Antlion's Share", npcName="M Tribe Ranger" },
                 { fateName="Double Dhara", npcName="Resistence Fighter" },
-                { fateName="Keeping the Peace", npcName="Resistence Fighter" }
+                { fateName="Dizzy Miss Grizzly", npcName="Flame Scout" },
+                { fateName="Keeping the Peace", npcName="Resistence Fighter" },
             },
             fatesWithContinuations = {},
             specialFates = {
                 "The Evil Seed", --Boss fight
             },
-            blacklistedFates= {}
+            blacklistedFates= {
+                "Keeping the Peace", --escort
+                "Keeping More Peace", --escort
+            }
         }
     },
     {
