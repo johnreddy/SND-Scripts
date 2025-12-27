@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: baanderson40 || orginially pot0to
-version: 3.1.6
+version: 3.1.7
 description: |
   Support via https://ko-fi.com/baanderson40
   Fate farming script with the following features:
@@ -160,6 +160,7 @@ configs:
 ********************************************************************************
 *                                  Changelog                                   *
 ********************************************************************************
+    -> 3.1.7    Adding Stormblood fates
     -> 3.1.6    Added multiple ARR fate definitions
     -> 3.1.5    Added HW fate definitions
     -> 3.1.4    Modified VBM/BMR combat commands to use IPCs
@@ -726,6 +727,9 @@ FatesData = {
                 { fateName="Keeping the Peace", npcName="Resistence Fighter" }
             },
             fatesWithContinuations = {},
+            specialFates = {
+                "The Evil Seed", --Boss fight
+            },
             blacklistedFates= {}
         }
     },
