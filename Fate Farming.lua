@@ -825,7 +825,9 @@ FatesData = {
             specialFates = {
                 "Wham, Bam, Thank You, Mammoth", --Boss fight
             },
-            blacklistedFates= {}
+            blacklistedFates= {
+                "A Walk Through the Valley", --Escort quest via Mol Shepherd
+            },
         }
     },
     {
