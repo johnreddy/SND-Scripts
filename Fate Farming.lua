@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: baanderson40 || orginially pot0to
-version: 3.1.7
+version: 3.1.7a
 description: |
   Support via https://ko-fi.com/baanderson40
   Fate farming script with the following features:
@@ -160,6 +160,7 @@ configs:
 ********************************************************************************
 *                                  Changelog                                   *
 ********************************************************************************
+           a    Adding more in The Azim Steppe
     -> 3.1.7    Adding Stormblood fates
     -> 3.1.6    Added multiple ARR fate definitions
     -> 3.1.5    Added HW fate definitions
@@ -801,7 +802,7 @@ FatesData = {
                 { fateName="A Tisket, a Tasket", npcName="Gyogun of the Most Bountiful Catch" }
             },
             specialFates = {
-                "Foxy Lady" --foxyyy
+                "Foxy Lady", --foxyyy
             },
             fatesWithContinuations = {},
             blacklistedFates= {}
@@ -812,15 +813,18 @@ FatesData = {
         zoneId = 622,
         fatesList= {
             collectionsFates= {
-                { fateName="The Dataqi Chronicles: Duty", npcName="Altani" }
+                { fateName="The Dataqi Chronicles: Duty", npcName="Altani" },
             },
             otherNpcFates= {
                 { fateName="Rock for Food", npcName="Oroniri Youth" },
                 { fateName="Killing Dzo", npcName="Olkund Dzotamer" },
                 { fateName="They Shall Not Want", npcName="Mol Shepherd" },
-                { fateName="A Good Day to Die", npcName="Qestiri Merchant" }
+                { fateName="A Good Day to Die", npcName="Qestiri Merchant" },
             },
             fatesWithContinuations = {},
+            specialFates = {
+                "Wham, Bam, Thank You, Mammoth", --Boss fight
+            },
             blacklistedFates= {}
         }
     },
