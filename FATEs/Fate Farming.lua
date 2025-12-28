@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: johnreddy || orginially baanderson40, pot0to
-version: 3.1.7b
+version: 3.1.8
 description: |
   Fate farming script with the following features:
   - Can purchase Bicolor Gemstone Vouchers (both old and new) when your gemstones are almost capped
@@ -159,6 +159,7 @@ configs:
 ********************************************************************************
 *                                  Changelog                                   *
 ********************************************************************************
+    -> 3.1.8    Maintainer change.
            b    Adding more in The Azim Steppe
     -> 3.1.7    Adding Stormblood fates
     -> 3.1.6    Added multiple ARR fate definitions
