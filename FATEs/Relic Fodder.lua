@@ -19,8 +19,10 @@ configs:
     default: "None"
     is_choice: true
     choices: ["None",
-        "2.2 - Atma",
-        "5.35 - Memory of the Dying",
+        "2.2 - Atma - Up in Arms",
+        "5.35 - Memories - For Want of a Memory",
+        "5.45 - Memories - The Resistance Remembers",
+        "7.25 - Demiatma - Arcane Artistry",
         ]
 
 [[End Metadata]]
@@ -58,13 +60,48 @@ RelicFoddertarget = Config.Get("RelicFoddertarget")
 
 ScriptName = "Relic Fodder"
 
-
-RelicFodder =
-{
-    {zoneName = "", zoneId = 134, itemName = "Tortured Memory of the Dying", itemId = 31573},
-    {zoneName = "", zoneId = 138, itemName = "Sorrowful Memory of the Dying", itemId = 31574},
-    {zoneName = "", zoneId = 135, itemName = "Harrowing Memory of the Dying", itemId = 31575},
+RelicFodderOptions = {
+    { RelicTarget = "2.2 - Atma - Up in Arms",
+      RelicFodder = {
+        {itemName = "Atma of the Maiden", itemId = 7851, zoneName = "Central Shroud", zoneId = 148, }
+        {itemName = "Atma of the Scorpion", itemId = 7852, zoneName = "Southern Thanalan", zoneId = 146, flying=false, }
+        {itemName = "Atma of the Water-bearer", itemId = 7853, zoneName = "Upper La Noscea", zoneId = 139, }
+        {itemName = "Atma of the Goat", itemId = 7854, zoneName = "East Shroud", zoneId = 152, }
+        {itemName = "Atma of the Bull", itemId = 7855, zoneName = "Eastern Thanalan", zoneId = 145, }
+        {itemName = "Atma of the Ram", itemId = 7856, zoneName = "Middle La Noscea", zoneId = 134, }
+        {itemName = "Atma of the Twins", itemId = 7857, zoneName = "Western Thanalan", zoneId = 140, }
+        {itemName = "Atma of the Lion", itemId = 7858, zoneName = "Outer La Noscea", zoneId = 180, flying=false, }
+        {itemName = "Atma of the Fish", itemId = 7859, zoneName = "Lower La Noscea", zoneId = 135, }
+        {itemName = "Atma of the Archer", itemId = 7860, zoneName = "North Shroud", zoneId = 154, }
+        {itemName = "Atma of the Scales", itemId = 7861, zoneName = "Central Thanalan", zoneId = 141, }
+        {itemName = "Atma of the Crab", itemId = 7862, zoneName = "Western La Noscea", zoneId = 138, }
+      },
+    },
+    { RelicTarget = "5.35 - Memories - For Want of a Memory",
+      RelicFodder = {
+        {itemName = "Tortured Memory of the Dying", itemId = 31573,  zoneName = "Coerthas Western Highlands", zoneId = 397 },
+        {itemName = "Sorrowful Memory of the Dying", itemId = 31574, zoneName = "The Dravanian Forelands", zoneId = 398, },
+        {itemName = "Harrowing Memory of the Dying", itemId = 31575, zoneName = "The Dravanian Hinterlands", zoneId = 399 },
+      },
+    },
+    { RelicTarget = "5.45 - Memories - The Resistance Remembers",
+      RelicFodder = {
+        {itemName = "Haunting Memory of the Dying", itemId = 32957,  zoneName = " The Fringes", zoneId = 612, },
+        {itemName = "Vexatious  Memory of the Dying", itemId = 32958,  zoneName = "The Azim Steppe", zoneId = 622, },
+      },
+    },
+    { RelicTarget = "7.25 - Demiatma - Arcane Artistry",
+      RelicFodder = {
+        { itemName="Azurite Demiatma", itemId=47744, zoneName = "Urqopacha", zoneId = 1187 },
+        { itemName="Verdigris Demiatma", itemId=47745, zoneName = "Kozama'uka", zoneId = 1188, },
+        { itemName="Malachite Demiatma", itemId=47746, zoneName = "Yak T'el", zoneId = 1189, },
+        { itemName="Realgar Demiatma", itemId=47747, zoneName = "Shaaloani", zoneId = 1190, },
+        { itemName="Caput Mortuum Demiatma", itemId=47748, zoneName = "Heritage Found", zoneId = 1191, },
+        { itemName="Orpiment Demiatma", itemId=47749, zoneName = "Living Memory", zoneId = 1192, },
+      },
+    },
 }
+
 
 CharacterCondition = {
     casting=27,
