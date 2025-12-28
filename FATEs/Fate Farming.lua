@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: johnreddy || orginially baanderson40, pot0to
-version: 3.1.8
+version: 3.1.8a
 description: |
   Fate farming script with the following features:
   - Can purchase Bicolor Gemstone Vouchers (both old and new) when your gemstones are almost capped
@@ -159,6 +159,7 @@ configs:
 ********************************************************************************
 *                                  Changelog                                   *
 ********************************************************************************
+           a    Blacklisting Dravanien Forelands FATE
     -> 3.1.8    Maintainer change.
            b    Adding more in The Azim Steppe
     -> 3.1.7    Adding Stormblood fates
@@ -673,7 +674,9 @@ FatesData = {
                 "Coeurls Chase Boys Chase Coeurls", --coeurlregina
                 "Special Tarasque Force ", --Tarasque
             },
-            blacklistedFates= {}
+            blacklistedFates= {
+                "Hearing Voices", --difficulty navigating inside the caves
+            }
         }
     },
     {
