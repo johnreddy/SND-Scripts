@@ -1,9 +1,8 @@
 --[=====[
 [[SND Metadata]]
-author: baanderson40 || orginially pot0to
+author: johnreddy || orginially baanderson40, pot0to
 version: 3.1.7b
 description: |
-  Support via https://ko-fi.com/baanderson40
   Fate farming script with the following features:
   - Can purchase Bicolor Gemstone Vouchers (both old and new) when your gemstones are almost capped
   - Priority system for Fate selection: distance w/ teleport > most progress > is bonus fate > least time left > distance
