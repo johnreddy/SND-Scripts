@@ -136,7 +136,7 @@ end
 function GetNextRelicFodderTable()
     for _, relicFodderTable in pairs(RelicFodder) do
         if Inventory.GetItemCount(relicFodderTable.itemId) < NumberToFarm then
-            return relicFodderTable.
+            return relicFodderTable
         end
     end
 end
