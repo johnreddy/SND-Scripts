@@ -35,7 +35,7 @@ restart the fate farming script.
     -> 0.9.0    Copied from Zodiac Atma farming for starting
 
 --#region Settings
-
+]]
 --[[
 ********************************************************************************
 *                                   Settings                                   *
