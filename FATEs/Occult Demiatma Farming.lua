@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
-author: 'pot0to || Updated by: baanderson40'
-version: 2.0.1
+author: johnreddy || orginially baanderson40, pot0to
+version: 2.0.2
 description: Occult Demiatma Farming - Companion script for Fate Farming
 plugin_dependencies:
 - Lifestream
@@ -19,20 +19,12 @@ configs:
 --]=====]
 
 --[[
-
-********************************************************************************
-*                           Occult Demiatma Farming                            *
-*                                Version 2.0.1                                 *
-********************************************************************************
-
 Demiatma Farming script meant to be used with `Fate Farming.lua`. This will go down
 the list of Demiatma Farming zones and farm fates until you have 18 of the required
 atmas in your inventory, then teleport to the next zone and restart the fate
 farming script.
 
-Created by: pot0to (https://ko-fi.com/pot0to)
-Updated by: baanderson40 (https://ko-fi.com/baanderson40)
-
+    -> 2.0.2    Maintainer change
     -> 2.0.1    Updated CharacterCondition
     -> 2.0.0    Updated for Latest SnD
     -> 1.0.1    Added check for death and unexpected combat
