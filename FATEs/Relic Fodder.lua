@@ -52,7 +52,7 @@ RelicFodderTarget = Config.Get("RelicFodderTarget")
 
 --[[
 **************************************************************
-* Fixed Variable
+*  Code: Don't touch this unless you know what you're doing  *
 **************************************************************
 ]]
 
