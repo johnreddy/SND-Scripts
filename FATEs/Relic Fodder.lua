@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: johnreddy
-version: 0.9.0
+version: 1.0.0
 description: Generic Relic Fodder Farming - Companion script for Fate Farming
 plugin_dependencies:
 - Lifestream
@@ -12,7 +12,7 @@ configs:
     description: Name of the primary fate macro script.
     default: ""
   NumberToFarm:
-    description: How many of each relicFodder to farm?  Generally atma 1, 5.35 memories: 20, 5.45 memories: 18, demiatma: 6
+    description: "How many of each relicFodder to farm?  Generally atma 1, 5.35 memories: 20, 5.45 memories: 18, demiatma: 6"
     default: 1
   RelicFodderTarget:
     description: Select the relic fodder you want to farm FATEs for.
