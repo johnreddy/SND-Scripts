@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: johnreddy
-version: 0.9.1
+version: 0.9.1a
 description: Generic Relic Fodder Farming - Companion script for Fate Farming
 plugin_dependencies:
 - Lifestream
@@ -33,7 +33,7 @@ the list of relicFodder farming zones and farm fates until you have the selected
 of the required relicFodders in your inventory, then teleport to the next zone and 
 restart the fate farming script.
 
-    -> 0.9.1    Tweaking options
+    -> 0.9.1a    Tweaking options
     -> 0.9.0    Copied from Zodiac Atma farming for starting
 
 --#region Settings
@@ -143,7 +143,7 @@ end
 --[[ Select the list of fodder and zones for the relic we're going to be hunting for. ]]
 function GetRelicFodderTables()
     for _, foddertable in pairs(RelicFodderOptions) do
-        if foddertable.foddertarget == RelicFodderTarget then
+        if foddertable.RelicTarget == RelicFodderTarget then
             return foddertable.RelicFodder
         end
     end
