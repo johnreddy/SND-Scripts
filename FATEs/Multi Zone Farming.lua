@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
-author: 'pot0to || Updated by: Minnu'
-version: 2.0.1
+author: johnreddy || orginially baanderson40, Minnu, pot0to
+version: 2.0.2
 description: Multi Zone Farming - Companion script for Fate Farming
 plugin_dependencies:
 - Lifestream
@@ -16,18 +16,11 @@ configs:
 
 --[[
 
-********************************************************************************
-*                             Multi Zone Farming                               *
-*                                Version 2.0.0                                 *
-********************************************************************************
-
 Multi zone farming script meant to be used with `Fate Farming.lua`. This will go
 down the list of zones and farm fates until there are no eligible fates left,
 then teleport to the next zone and restart the fate farming script.
 
-Created by: pot0to (https://ko-fi.com/pot0to)
-Updated by: Minnu
-
+    -> 2.0.2    Maintainer change
     -> 2.0.1    Switching from Teleporter to Lifestream
     -> 2.0.0    Updated for Latest SnD
     -> 1.0.1    Added check for death and unexpected combat

@@ -1,9 +1,8 @@
 --[=====[
 [[SND Metadata]]
-author: baanderson40 || orginially pot0to
-version: 3.1.7b
+author: johnreddy || orginially baanderson40, pot0to
+version: 3.1.8
 description: |
-  Support via https://ko-fi.com/baanderson40
   Fate farming script with the following features:
   - Can purchase Bicolor Gemstone Vouchers (both old and new) when your gemstones are almost capped
   - Priority system for Fate selection: distance w/ teleport > most progress > is bonus fate > least time left > distance
@@ -160,6 +159,7 @@ configs:
 ********************************************************************************
 *                                  Changelog                                   *
 ********************************************************************************
+    -> 3.1.8    Maintainer change.
            b    Adding more in The Azim Steppe
     -> 3.1.7    Adding Stormblood fates
     -> 3.1.6    Added multiple ARR fate definitions
