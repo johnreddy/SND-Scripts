@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: johnreddy
-version: 0.9.0
+version: 0.9.1
 description: Generic Relic Fodder Farming - Companion script for Fate Farming
 plugin_dependencies:
 - Lifestream
@@ -11,18 +11,19 @@ configs:
   FateMacro:
     description: Name of the primary fate macro script.
     default: ""
-  NumberToFarm:
-    description: "How many of each relicFodder to farm?  Generally atma 1, 5.35 memories: 20, 5.45 memories: 18, demiatma: 6"
-    default: 1
   RelicFodderTarget:
     description: Select the relic fodder you want to farm FATEs for.
-    default: "None"
+    default: "2.2 - Atma - Up in Arms"
     is_choice: true
-    choices: ["None",
+    choices: [
         "2.2 - Atma - Up in Arms",
         "5.35 - Memories - For Want of a Memory",
         "5.45 - Memories - The Resistance Remembers",
-        "7.25 - Demiatma - Arcane Artistry"]
+        "7.25 - Demiatma - Arcane Artistry",
+        ]
+  NumberToFarm:
+    description: "How many of each relicFodder to farm?  Generally atma 1, 5.35 memories: 20, 5.45 memories: 18, demiatma: 6"
+    default: 1
 [[End Metadata]]
 --]=====]
 
@@ -32,6 +33,7 @@ the list of relicFodder farming zones and farm fates until you have the selected
 of the required relicFodders in your inventory, then teleport to the next zone and 
 restart the fate farming script.
 
+    -> 0.9.1    Tweaking options
     -> 0.9.0    Copied from Zodiac Atma farming for starting
 
 --#region Settings
@@ -59,9 +61,6 @@ RelicFodderTarget = Config.Get("RelicFodderTarget")
 ScriptName = "Relic Fodder"
 
 RelicFodderOptions = {
-  { RelicTarget = "None",
-    RelicFodder = {},
-  },
   { RelicTarget = "2.2 - Atma - Up in Arms",
     RelicFodder = {
       {itemName = "Atma of the Maiden", itemId = 7851, zoneName = "Central Shroud", zoneId = 148, },
