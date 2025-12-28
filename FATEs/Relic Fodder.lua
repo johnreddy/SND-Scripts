@@ -136,16 +136,16 @@ end
 function GetNextRelicFodderTable()
     for _, relicFodderTable in pairs(RelicFodder) do
         if Inventory.GetItemCount(relicFodderTable.itemId) < NumberToFarm then
-            return relicFodderTable
+            return relicFodderTable.
         end
     end
 end
 
 --[[ Select the list of fodder and zones for the relic we're going to be hunting for. ]]
 function GetRelicFodderTables()
-    for foddertarget, foddertable in pairs(RelicFodderOptions) do
-        if foddertarget == RelicFodderTarget then
-            return foddertable
+    for _, foddertable in pairs(RelicFodderOptions) do
+        if foddertable.foddertarget == RelicFodderTarget then
+            return foddertable.RelicFodder
         end
     end
 end
