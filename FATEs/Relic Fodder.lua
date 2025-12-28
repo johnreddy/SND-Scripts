@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: johnreddy
-version: 0.9.1a
+version: 0.9.1b
 description: Generic Relic Fodder Farming - Companion script for Fate Farming
 plugin_dependencies:
 - Lifestream
@@ -33,7 +33,7 @@ the list of relicFodder farming zones and farm fates until you have the selected
 of the required relicFodders in your inventory, then teleport to the next zone and 
 restart the fate farming script.
 
-    -> 0.9.1a    Tweaking options
+    -> 0.9.1b    Tweaking options
     -> 0.9.0    Copied from Zodiac Atma farming for starting
 
 --#region Settings
@@ -81,7 +81,7 @@ RelicFodderOptions = {
     RelicFodder = {
       {itemName = "Tortured Memory of the Dying", itemId = 31573,  zoneName = "Coerthas Western Highlands", zoneId = 397 },
       {itemName = "Sorrowful Memory of the Dying", itemId = 31574, zoneName = "The Dravanian Forelands", zoneId = 398, },
-      {itemName = "Harrowing Memory of the Dying", itemId = 31575, zoneName = "The Dravanian Hinterlands", zoneId = 399 },
+      {itemName = "Harrowing Memory of the Dying", itemId = 31575, zoneName = "Azys Lla", zoneId = 402 },
     },
   },
   { RelicTarget = "5.45 - Memories - The Resistance Remembers",
