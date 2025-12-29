@@ -126,6 +126,7 @@ In MacrosLibray, create a new macro.  You can copy and paste, but I prefer to do
 ### Configure Fate Farming
 <img width="505" align=right height="112" alt="image" src="https://github.com/user-attachments/assets/6ff357b2-3858-41a9-84a8-19a596153bdd" />
 When you've got Something Need Doing (SND) open, select the Fate Farming script and click the gear icon in the top right of the SND window to make sure the config options for Fate Farming Showing.  It will also automatically teleport to the appropriate vendor for restocking Gysahl Greens or Dark Matter, or spending your Bicolor Gemstones on the item you select.
+
 * **Rotation Plugin**: BossMod  (You can use any of the ones listed, I just use BossMod for the example)
 * **Dodging Plugin**: None  (if using BossMod or BossModReborn for rotation, you don't need to specify)
 * **BMR/VBM Specific Settings**: This is a do-nothing field to note the following features are for Boss Mod Reborn (BMR) and Boss Mod (VBM) users
@@ -161,6 +162,7 @@ The configuration is slightly more complex than Multi Zone Farming.  Make a note
 <img align=right width="552" height="124" alt="image" src="https://github.com/user-attachments/assets/dcf0d0e8-fe50-4e1d-8579-da54dd8e5306" /> To run your script of choice, go to the MacrosLibrary in SND, select your script, and click the "start" button (looks like a "play" icon).  When you've done so, you'll see a green "playing" button on the right side.  You can click that to see all the Macros currently playing.
 <img align=right width="552" height="124" alt="image" src="https://github.com/user-attachments/assets/fce61dd5-3d3c-4f4f-a8c3-190535f2fbf1" />
 <img align=right width="496" height="189" alt="image" src="https://github.com/user-attachments/assets/e288dc7d-3ec7-4700-9c6f-0f1cfa5f0f5c" />
+
 
 ## Stop the scripts?
 **Relic Fodder** will automatically end on its own when you reach the desired number of items.  However should you want to stop it prematurely, or stop any SND running, then click the "Stop" icon either in the main SND window, or in the SND "Macro Status" window.  Remember that Relic Fodder and Multi Zone Farming both spawn Fate Farming, so you'll need to stop both scripts to completely stop.  The Macro Status window is useful for that.
