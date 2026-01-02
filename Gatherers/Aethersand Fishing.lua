@@ -5,52 +5,45 @@ version: 0.9.0
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
-- AutoRetainer
 - Lifestream
 - vnavmesh
 - YesAlready
 configs:
-  AethersandToFarm:
-    description: Type of Aethersand to farm.
-    is_choice: true
-    default: "Levinchrome Aethersand"
-    choices:
-        - "Levinchrome Aethersand"
-  Food:
-    description: Leave blank if you don't want to use any food. If its HQ include <hq> next to the name "Baked Eggplant <hq>".
-  Potion:
-    description: Leave blank if you don't want to use any potions. If its HQ include <hq> next to the name "Superior Spiritbond Potion <hq>".
-  MinInventoryFreeSlots:
-    description: Minimum free inventory slots required to start turn-ins.
-    default: 5
-    min: 0
-    max: 140
-  DoAutoRetainers:
-    description: Automatically interact with retainers for ventures.
-    default: true
-  GrandCompanyTurnIn:
-    description: Automatically turn in eligible items to your Grand Company for seals.
-    default: false
-  SelfRepair:
-    description: Automatically repair your own gear when durability is low.
-    default: true
-  BuyDarkMatter:
-    description: Buy Dark Matter for self repair.
-    default: true
-  RepairThreshold:
-    description: Durability percentage at which tools should be repaired.
-    default: 20
-    min: 0
-    max: 100
-  ExtractMateria:
-    description: Automatically extract materia from fully spiritbonded gear.
-    default: true
-  MoveSpotsAfter:
-    description: Number of minutes to fish one spot before moving to the next.
-    default: 30
-  ResetHardAmissAfter:
-    description: Number of minutes to farm in current instance before teleporting away and back.
-    default: 120
+    AethersandToFarm:
+        description: Type of Aethersand to farm.
+        is_choice: true
+        default: "Levinchrome Aethersand"
+        choices:
+            - "Levinchrome Aethersand"
+    Food:
+        description: "Leave blank if you don't want to use any food. If its HQ include <hq> next to the name \"Baked Eggplant <hq>\"."
+    Potion:
+        description: "Leave blank if you don't want to use any potions. If its HQ include <hq> next to the name \"Superior Spiritbond Potion <hq>\"."
+    MinInventoryFreeSlots:
+        description: Minimum free inventory slots required to start turn-ins.
+        default: 5
+        min: 0
+        max: 140
+    SelfRepair:
+        description: Automatically repair your own gear when durability is low.
+        default: true
+    BuyDarkMatter:
+        description: Buy Dark Matter for self repair.
+        default: true
+    RepairThreshold:
+        description: Durability percentage at which tools should be repaired.
+        default: 20
+        min: 0
+        max: 100
+    ExtractMateria:
+        description: Automatically extract materia from fully spiritbonded gear.
+        default: true
+    MoveSpotsAfter:
+        description: Number of minutes to fish one spot before moving to the next.
+        default: 30
+    ResetHardAmissAfter:
+        description: Number of minutes to farm in current instance before teleporting away and back.
+        default: 120
 
 [[End Metadata]]
 --]=====]
@@ -90,10 +83,7 @@ AethersandToFarm       = Config.Get("AethersandToFarm")
 ItemToExchange         = Config.Get("ItemToExchange")
 Food                   = Config.Get("Food")
 Potion                 = Config.Get("Potion")
-HubCity                = Config.Get("HubCity")
 MinInventoryFreeSlots  = Config.Get("MinInventoryFreeSlots")
-DoAutoRetainers        = Config.Get("DoAutoRetainers")
-GrandCompanyTurnIn     = Config.Get("GrandCompanyTurnIn")
 SelfRepair             = Config.Get("SelfRepair")
 BuyDarkMatter          = Config.Get("BuyDarkMatter")
 RepairThreshold        = Config.Get("RepairThreshold")
@@ -101,12 +91,6 @@ ExtractMateria         = Config.Get("ExtractMateria")
 MoveSpotsAfter         = Config.Get("MoveSpotsAfter")
 ResetHardAmissAfter    = Config.Get("ResetHardAmissAfter")
 
-------------------
---    Scrips    --
-------------------
-
-OrangeGathererScripId = 41785
-PurpleGathererScripId = 33914
 
 --============================ CONSTANT ==========================--
 
@@ -192,56 +176,6 @@ FishTable = {
     },
 }
 
--------------------
---    HubCity    --
--------------------
-
-HubCities = {
-    {
-        zoneName = "Limsa",
-        zoneId = 129,
-        aethernet = {
-            aethernetZoneId = 129,
-            aethernetName   = "Hawkers' Alley",
-            x = -213.61108, y = 16.739136, z = 51.80432
-        },
-        retainerBell  = { x = -124.703, y = 18, z = 19.887, requiresAethernet = false },
-        scripExchange = { x = -258.52585, y = 16.2, z = 40.65883, requiresAethernet = true }
-    },
-    {
-        zoneName = "Gridania",
-        zoneId = 132,
-        aethernet = {
-            aethernetZoneId = 133,
-            aethernetName   = "Leatherworkers' Guild & Shaded Bower",
-            x = 131.9447, y = 4.714966, z = -29.800903
-        },
-        retainerBell  = { x = 168.72, y = 15.5, z = -100.06, requiresAethernet = true },
-        scripExchange = { x = 142.15, y = 13.74, z = -105.39, requiresAethernet = true }
-    },
-    {
-        zoneName = "Ul'dah",
-        zoneId = 130,
-        aethernet = {
-            aethernetZoneId = 131,
-            aethernetName   = "Sapphire Avenue Exchange",
-            x = 101, y = 9, z = -112
-        },
-        retainerBell  = { x = 146.760, y = 4, z = -42.992, requiresAethernet = true },
-        scripExchange = { x = 147.73, y = 4, z = -18.19, requiresAethernet = true }
-    },
-    {
-        zoneName = "Solution Nine",
-        zoneId = 1186,
-        aethernet = {
-            aethernetZoneId = 1186,
-            aethernetName   = "Nexus Arcade",
-            x = -161, y = -1, z = 21
-        },
-        retainerBell  = { x = -152.465, y = 0.660, z = -13.557, requiresAethernet = true },
-        scripExchange = { x = -158.019, y = 0.922, z = -37.884, requiresAethernet = true }
-    }
-}
 
 --=========================== FUNCTIONS ==========================--
 
@@ -475,7 +409,6 @@ function CharacterState.gsGoToFishingHole()
                 return
             end
         end
-
         SelectedFishingSpot.lastStuckCheckPosition = { x = x, y = y, z = z }
     end
 
@@ -518,8 +451,8 @@ function CharacterState.gsFishing()
             QuitFishing()
             yield("/wait 1")
         else
-            State = CharacterState.gsTurnIn
-            Dalamud.Log(string.format("%s State Changed → TurnIn", ScriptName))
+            State = CharacterState.gsReduce
+            Dalamud.Log(string.format("%s State Changed → Reduce", ScriptName))
         end
         return
     end
@@ -531,8 +464,8 @@ function CharacterState.gsFishing()
                 yield("/wait 1")
             end
         else
-            State = CharacterState.gsTurnIn
-            Dalamud.Log(string.format("%s State Changed → Forced TurnIn to avoid hard amiss", ScriptName))
+            State = CharacterState.gsResetAmiss
+            Dalamud.Log(string.format("%s State Changed → Forced teleport away to avoid hard amiss", ScriptName))
         end
         return
     elseif os.clock() - SelectedFishingSpot.startTime > (MoveSpotsAfter * 60) then
@@ -654,6 +587,7 @@ function CharacterState.gsBuyFishingBait()
     elseif Addons.GetAddon("SelectYesno").Ready then
         yield("/callback SelectYesno true 0")
     elseif Addons.GetAddon("Shop").Ready then
+        -- #TODO Change this to be variable based on the target bait
         yield("/callback Shop true 0 3 99 0")
     elseif baitMerchant then
         baitMerchant:Interact()
@@ -692,212 +626,23 @@ function DistanceBetween(px1, py1, pz1, px2, py2, pz2)
     return distance
 end
 
-function CharacterState.gsGoToHubCity()
-    if not Player.Available then
-        yield("/wait 1")
-    elseif Svc.ClientState.TerritoryType ~= SelectedHubCity.zoneId then
-        TeleportTo(SelectedHubCity.aetheryte)
-    else
-        State = CharacterState.gsReady
-        Dalamud.Log(string.format("%s State Changed → Ready", ScriptName))
+
+function CharacterState.gsReduce()
+  if Inventory.GetCollectableItemCount(SelectedFish.fishId, 1) > 0 then
+    if not Addons.GetAddon("PurifyItemSelector").Ready then
+      yield('/action "Aetherial Reduction"')
+      yield("/wait 1")
     end
+    if not ((automatic reducing)) then
+      if ((able to automatic reduce)) then
+        yield("/click PurifyResult Automatic")
+      else
+        yield("/callback PurifyItemSelector true 12 0")
+    end
+  end
 end
 
-------------------
---    TurnIn    --
-------------------
-
-function CharacterState.gsTurnIn()
-    if Inventory.GetCollectableItemCount(SelectedFish.fishId, 1) == 0 then
-        if Addons.GetAddon("CollectablesShop").Ready then
-            yield("/callback CollectablesShop true -1")
-        elseif Inventory.GetItemCount(GathererScripId) >= ScripExchangeItem.price then
-            State = CharacterState.gsScripExchange
-            Dalamud.Log(string.format("%s State Changed → ScripExchange", ScriptName))
-        else
-            State = CharacterState.gsReady
-            Dalamud.Log(string.format("%s State Changed → Ready", ScriptName))
-        end
-
-    elseif Svc.ClientState.TerritoryType ~= SelectedHubCity.zoneId then
-        State = CharacterState.gsGoToHubCity
-        Dalamud.Log(string.format("%s State Changed → GoToHubCity", ScriptName))
-
-    elseif SelectedHubCity.scripExchange.requiresAethernet and (Svc.ClientState.TerritoryType ~= SelectedHubCity.aethernet.aethernetZoneId or
-        GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > DistanceBetween(SelectedHubCity.aethernet.x, SelectedHubCity.aethernet.y, SelectedHubCity.aethernet.z, SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) + 10) then
-        if not IPC.Lifestream.IsBusy() then
-            TeleportTo(SelectedHubCity.aethernet.aethernetName)
-        end
-        yield("/wait 1")
-    elseif Addons.GetAddon("TeleportTown").Ready then
-        yield("/callback TeleportTown false -1")
-
-    elseif GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > 1 then
-        if not (IPC.vnavmesh.PathfindInProgress() or IPC.vnavmesh.IsRunning()) then
-            IPC.vnavmesh.PathfindAndMoveTo(Vector3(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z), false)
-            repeat
-                yield("/wait 1")
-            until not (IPC.vnavmesh.PathfindInProgress() or IPC.vnavmesh.IsRunning())
-        end
-
-    elseif Inventory.GetItemCount(GathererScripId) >= 3800 then
-        if Addons.GetAddon("CollectablesShop").Ready then
-            yield("/callback CollectablesShop true -1")
-        else
-            State = CharacterState.gsScripExchange
-            Dalamud.Log(string.format("%s State Changed → ScripExchange", ScriptName))
-        end
-    else
-        if IPC.vnavmesh.PathfindInProgress() or IPC.vnavmesh.IsRunning() then
-            IPC.vnavmesh.Stop()
-        end
-
-        if not Addons.GetAddon("CollectablesShop").Ready then
-            local appraiser = Entity.GetEntityByName("Collectable Appraiser")
-            if appraiser then
-                appraiser:SetAsTarget()
-                appraiser:Interact()
-            end
-        else
-            yield("/callback CollectablesShop true 12 " .. SelectedFish.collectiblesTurnInListIndex)
-            yield("/wait 0.1")
-            yield("/callback CollectablesShop true 15 0")
-            yield("/wait 1")
-        end
-    end
-end
-
----------------------------
---    Scrips Exchange    --
----------------------------
-
-function CharacterState.gsScripExchange()
-    if Inventory.GetItemCount(GathererScripId) < ScripExchangeItem.price then
-        if Addons.GetAddon("InclusionShop").Ready then
-            yield("/callback InclusionShop true -1")
-        elseif Inventory.GetCollectableItemCount(SelectedFish.fishId, 1) > 0 then
-            State = CharacterState.gsTurnIn
-            Dalamud.Log(string.format("%s State Changed → TurnIn", ScriptName))
-        else
-            State = CharacterState.gsReady
-            Dalamud.Log(string.format("%s State Changed → Ready", ScriptName))
-        end
-
-    elseif Svc.ClientState.TerritoryType ~= SelectedHubCity.zoneId then
-        State = CharacterState.gsGoToHubCity
-        Dalamud.Log(string.format("%s State Changed → GoToHubCity", ScriptName))
-
-    elseif SelectedHubCity.scripExchange.requiresAethernet and (Svc.ClientState.TerritoryType ~= SelectedHubCity.aethernet.aethernetZoneId or
-        GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > DistanceBetween(SelectedHubCity.aethernet.x, SelectedHubCity.aethernet.y, SelectedHubCity.aethernet.z, SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) + 10) then
-        if not IPC.Lifestream.IsBusy() then
-            TeleportTo(SelectedHubCity.aethernet.aethernetName)
-        end
-        yield("/wait 1")
-
-    elseif Addons.GetAddon("TeleportTown").Ready then
-        yield("/callback TeleportTown false -1")
-
-    elseif GetDistanceToPoint(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z) > 1 then
-        if not (IPC.vnavmesh.PathfindInProgress() or IPC.vnavmesh.IsRunning()) then
-            IPC.vnavmesh.PathfindAndMoveTo(Vector3(SelectedHubCity.scripExchange.x, SelectedHubCity.scripExchange.y, SelectedHubCity.scripExchange.z), false)
-        end
-
-    elseif Addons.GetAddon("ShopExchangeItemDialog").Ready then
-        yield("/callback ShopExchangeItemDialog true 0")
-
-    elseif Addons.GetAddon("SelectIconString").Ready then
-        yield("/callback SelectIconString true 0")
-
-    elseif Addons.GetAddon("InclusionShop").Ready then
-        yield("/callback InclusionShop true 12 " .. ScripExchangeItem.categoryMenu)
-        yield("/wait 1")
-        yield("/callback InclusionShop true 13 " .. ScripExchangeItem.subcategoryMenu)
-        yield("/wait 1")
-        yield("/callback InclusionShop true 14 " .. ScripExchangeItem.listIndex .. " " .. math.min(99, Inventory.GetItemCount(GathererScripId) // ScripExchangeItem.price))
-        yield("/wait 1")
-
-    else
-        yield("/wait 1")
-        local exchange = Entity.GetEntityByName("Scrip Exchange")
-        if exchange then
-            exchange:SetAsTarget()
-            exchange:Interact()
-        end
-    end
-end
-
-----------------
---    Misc    --
-----------------
-
-function CharacterState.gsAutoRetainers()
-    local bell = Entity.GetEntityByName("Summoning Bell")
-
-    if (not IPC.AutoRetainer.AreAnyRetainersAvailableForCurrentChara() or Inventory.GetFreeInventorySlots() <= 1) then
-        if Addons.GetAddon("RetainerList").Ready then
-            yield("/callback RetainerList true -1")
-        elseif not Svc.Condition[CharacterCondition.occupiedSummoningBell] then
-            State = CharacterState.gsReady
-            Dalamud.Log(string.format("%s State Changed → Ready", ScriptName))
-        end
-
-    elseif not (Svc.ClientState.TerritoryType == SelectedHubCity.zoneId or Svc.ClientState.TerritoryType == SelectedHubCity.aethernet.aethernetZoneId) then
-        Dalamud.Log(string.format("%s Teleporting to hub city.", ScriptName))
-        TeleportTo(SelectedHubCity.aetheryte)
-
-    elseif SelectedHubCity.retainerBell.requiresAethernet and (Svc.ClientState.TerritoryType ~= SelectedHubCity.aethernet.aethernetZoneId or
-        (GetDistanceToPoint(SelectedHubCity.retainerBell.x, SelectedHubCity.retainerBell.y, SelectedHubCity.retainerBell.z) > (DistanceBetween(SelectedHubCity.aethernet.x, SelectedHubCity.aethernet.y, SelectedHubCity.aethernet.z, SelectedHubCity.retainerBell.x, SelectedHubCity.retainerBell.y, SelectedHubCity.retainerBell.z) + 10))) then
-        if not IPC.Lifestream.IsBusy() then
-            TeleportTo(SelectedHubCity.aethernet.aethernetName)
-        end
-        yield("/wait 1")
-
-    elseif Addons.GetAddon("TeleportTown").Ready then
-        yield("/callback TeleportTown false -1")
-
-    elseif GetDistanceToPoint(SelectedHubCity.retainerBell.x, SelectedHubCity.retainerBell.y, SelectedHubCity.retainerBell.z) > 1 then
-        if not (IPC.vnavmesh.PathfindInProgress() or IPC.vnavmesh.IsRunning()) then
-            IPC.vnavmesh.PathfindAndMoveTo(Vector3(SelectedHubCity.retainerBell.x, SelectedHubCity.retainerBell.y, SelectedHubCity.retainerBell.z), false)
-        end
-
-    elseif IPC.vnavmesh.PathfindInProgress() or IPC.vnavmesh.IsRunning() then
-        return
-
-    elseif not Entity.Player.Target or Entity.Player.Target.Name ~= "Summoning Bell" then
-        if bell then
-            bell:SetAsTarget()
-        end
-        return
-
-    elseif not Svc.Condition[CharacterCondition.occupiedSummoningBell] then
-        if bell then
-            bell:Interact()
-        end
-
-    elseif Addons.GetAddon("RetainerList").Ready then
-        yield("/ays e")
-        yield("/wait 1")
-    end
-end
-
-local deliver = false
-function CharacterState.gsGCTurnIn()
-    if Inventory.GetFreeInventorySlots() <= MinInventoryFreeSlots and not deliver then
-        Dalamud.Log(string.format("%s Starting GC turn-in.", ScriptName))
-        yield("/ays deliver")
-        yield("/wait 1")
-        deliver = true
-        return
-
-    elseif IPC.AutoRetainer.IsBusy() then
-        return
-
-    else
-        State = CharacterState.gsReady
-        Dalamud.Log(string.format("%s State Changed → Ready", ScriptName))
-        deliver = false
-    end
-end
+          
 
 function CharacterState.gsRepair()
     if Addons.GetAddon("SelectYesno").Ready then
@@ -1079,17 +824,9 @@ function CharacterState.gsReady()
         State = CharacterState.gsExtractMateria
         Dalamud.Log(string.format("%s State Changed → ExtractMateria", ScriptName))
 
-    elseif DoAutoRetainers and IPC.AutoRetainer.AreAnyRetainersAvailableForCurrentChara() and Inventory.GetFreeInventorySlots() > 1 then
-        State = CharacterState.gsAutoRetainers
-        Dalamud.Log(string.format("%s State Changed → ProcessingRetainers", ScriptName))
-
     elseif Inventory.GetFreeInventorySlots() <= MinInventoryFreeSlots and Inventory.GetCollectableItemCount(SelectedFish.fishId, 1) > 0 then
-        State = CharacterState.gsTurnIn
-        Dalamud.Log(string.format("%s State Changed → TurnIn", ScriptName))
-
-    elseif GrandCompanyTurnIn and Inventory.GetFreeInventorySlots() <= MinInventoryFreeSlots then
-        State = CharacterState.gsGCTurnIn
-        Dalamud.Log(string.format("%s State Changed → GCTurnIn", ScriptName))
+        State = CharacterState.gsReduce
+        Dalamud.Log(string.format("%s State Changed → Reduce", ScriptName))
 
     elseif Inventory.GetItemCount(baitVersatileLure) == 0 then
         State = CharacterState.gsBuyFishingBait
@@ -1102,6 +839,32 @@ function CharacterState.gsReady()
 end
 
 --=========================== EXECUTION ==========================--
+--[[
+List of CharacterStates:
+#TODO create
+  - gsResetAmiss
+    Select place to teleport to and go there to reset hard amiss timer
+  - gsReduce
+    Reduce all items capable of Aetherial Reduction "Purify"
+
+#TODO Document
+  - gsFishSense
+    Use OnChatMessage trigger to force relocation when seeing "fish sense something amiss".
+  - gsTeleportFishingZone
+    Teleport to the zone for fishing using "TeleportTo" function
+  - gsGoToFishingHole
+    Use vnavmesh to move to a semi-random location for fishing
+  - gsFishing
+    Do the fishing until hitting minimum free inventory slots.
+  - gsBuyFishingBait
+    Go buy the bait if needed
+  - gsRepair
+  - gsExtractMateria
+  - gsReady
+
+    
+]]
+
 
 LastStuckCheckTime = os.clock()
 LastStuckCheckPosition = {
@@ -1109,24 +872,6 @@ LastStuckCheckPosition = {
     y = Player.Entity.Position.Y,
     z = Player.Entity.Position.Z
 }
-
-if AethersandToFarm == "Orange" then
-    GathererScripId = OrangeGathererScripId
-else
-    GathererScripId = PurpleGathererScripId
-end
-
-for _, item in ipairs(ScripExchangeItems) do
-    if item.itemName == ItemToExchange then
-        ScripExchangeItem = item
-    end
-end
-
-if ScripExchangeItem == nil then
-    yield(string.format("/echo %s Cannot recognize item: %s. Stopping script.", ScriptName, ItemToExchange))
-    Dalamud.Log(string.format("%s Cannot recognize item: %s. Stopping script.", ScriptName, ItemToExchange))
-    yield("/snd stop all")
-end
 
 SelectedFish = SelectFishTable()
 
@@ -1144,23 +889,6 @@ end
 IPC.AutoHook.SetPluginState(true)
 IPC.AutoHook.DeleteAllAnonymousPresets()
 IPC.AutoHook.CreateAndSelectAnonymousPreset(SelectedFish.autoHookPreset)
-
-for _, city in ipairs(HubCities) do
-    if city.zoneName == HubCity then
-        SelectedHubCity = city
-        local aetheryteName = GetAetheryteName(city.zoneId)
-        if aetheryteName then
-            SelectedHubCity.aetheryte = aetheryteName
-        end
-        break
-    end
-end
-
-if SelectedHubCity == nil then
-    yield(string.format("/echo %s Could not find hub city: %s. Stopping script.", ScriptName, HubCity))
-    Dalamud.Log(string.format("%s Could not find hub city: %s. Stopping script.", ScriptName, HubCity))
-    yield("/snd stop all")
-end
 
 if Player.Job.Id ~= 18 then
     Dalamud.Log(string.format("%s Switching to Fisher.", ScriptName))
