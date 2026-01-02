@@ -172,7 +172,7 @@ FishTable = {
 
         },
         Aethersand                  = "Levinchrome Aethersand",
-        scripId                     = 46246,
+        sandItemID                  = 46246,
     },
 }
 
