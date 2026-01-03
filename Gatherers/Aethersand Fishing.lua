@@ -49,7 +49,10 @@ configs:
 --]=====]
 
 --[[
-
+    -> 0.9.1    Removed AutoRetainer
+                Removed Scrip turnins and spending
+                Moves utility functions and CharacterState functions
+                Added initial header comments to functions
     -> 0.9.0    Initial adaptation from https://github.com/MinnuVerse/SnD/blob/main/Gatherers/FishingGathererScrips.lua
                 Change ScriptName logging to a variable
                 Removed collectable turn-ins, Script fish
@@ -115,7 +118,7 @@ CharacterCondition = {
 --    Items    --
 -----------------
 
-    baitVersatileLure     = 29717
+baitVersatileLure     = 29717
 
 --------------------
 --    Merchant    --
@@ -177,12 +180,11 @@ FishTable = {
 }
 
 
---=========================== FUNCTIONS ==========================--
+--[[
+   Action Functions
+  ]]
 
--------------------
---    Actions    --
--------------------
-
+--[[ Mount ]]
 function Mount()
     local mountActionId = 9
     Dalamud.Log(string.format("%s Using Mount Roulette...", ScriptName))
@@ -192,6 +194,7 @@ function Mount()
     until Svc.Condition[CharacterCondition.mounted]
 end
 
+--[[ Dismount ]]
 function Dismount()
     local dismountActionId = 23
     repeat
@@ -200,20 +203,24 @@ function Dismount()
     until not Svc.Condition[CharacterCondition.mounted]
 end
 
+--[[ CastFishing ]]
 function CastFishing()
     local castFishingActionId = 289
     Actions.ExecuteAction(castFishingActionId, ActionType.Action)
 end
 
+--[[ QuitFishing ]]
 function QuitFishing()
     local quitFishingActionId = 299
     Actions.ExecuteAction(quitFishingActionId, ActionType.Action)
 end
 
--------------------
---    Utility    --
--------------------
 
+--[[
+   Utility Functions
+  ]]
+
+--[[ WaitForPlayer ]]
 function WaitForPlayer()
     Dalamud.Log(string.format("%s Waiting for player...", ScriptName))
     repeat
@@ -222,6 +229,7 @@ function WaitForPlayer()
     yield("/wait 0.1")
 end
 
+--[[ GetAetheryteName ]]
 function GetAetheryteName(zoneId)
     local territoryData = Excel.GetRow("TerritoryType", zoneId)
 
@@ -232,6 +240,7 @@ function GetAetheryteName(zoneId)
     end
 end
 
+--[[ TeleportTo ]]
 function TeleportTo(aetheryteName)
     IPC.Lifestream.ExecuteCommand(aetheryteName)
     yield("/wait 1")
@@ -245,6 +254,7 @@ function TeleportTo(aetheryteName)
     yield("/wait 1")
 end
 
+--[[ OnChatMessage ]]
 function OnChatMessage()
     local message = TriggerData.message
     local patternToMatch = "The fish sense something amiss. Perhaps it is time to try another location."
@@ -256,6 +266,7 @@ function OnChatMessage()
     end
 end
 
+--[[ NeedsRepair ]]
 function NeedsRepair(repairThreshold)
     local repairList = Inventory.GetItemsInNeedOfRepairs(repairThreshold)
     local needsRepair = repairList.Count > 0
@@ -263,6 +274,7 @@ function NeedsRepair(repairThreshold)
     return needsRepair
 end
 
+--[[ CanExtractMateria ]]
 function CanExtractMateria()
     local bondedItems = Inventory.GetSpiritbondedItems()
     local count = (bondedItems and bondedItems.Count) or 0
@@ -270,6 +282,7 @@ function CanExtractMateria()
     return count
 end
 
+--[[ HasStatusId ]]
 function HasStatusId(statusId)
     local statusList = Player.Status
 
@@ -287,10 +300,42 @@ function HasStatusId(statusId)
     return false
 end
 
--------------------
---    Fishing    --
--------------------
+--[[ GetDistanceToPoint ]]
+function GetDistanceToPoint(dX, dY, dZ)
+    local player = Svc.ClientState.LocalPlayer
+    if not player or not player.Position then
+        Dalamud.Log(string.format("%s GetDistanceToPoint: Player position unavailable.", ScriptName))
+        return math.huge
+    end
 
+    local px = player.Position.X
+    local py = player.Position.Y
+    local pz = player.Position.Z
+
+    local dx = dX - px
+    local dy = dY - py
+    local dz = dZ - pz
+
+    local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
+    return distance
+end
+
+--[[ DistanceBetween ]]
+function DistanceBetween(px1, py1, pz1, px2, py2, pz2)
+    local dx = px2 - px1
+    local dy = py2 - py1
+    local dz = pz2 - pz1
+
+    local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
+    return distance
+end
+
+
+--[[
+   Fishing Functions
+  ]]
+
+--[[ InterpolateCoordinates ]]
 function InterpolateCoordinates(startCoords, endCoords, n)
     local x = startCoords.x + n * (endCoords.x - startCoords.x)
     local y = startCoords.y + n * (endCoords.y - startCoords.y)
@@ -298,6 +343,7 @@ function InterpolateCoordinates(startCoords, endCoords, n)
     return { waypointX = x, waypointY = y, waypointZ = z }
 end
 
+--[[ GetWaypoint ]]
 function GetWaypoint(coords, n)
     local total_distance = 0
     local distances = {}
@@ -326,7 +372,8 @@ function GetWaypoint(coords, n)
     return { waypointX = coords[#coords].x, waypointY = coords[#coords].y, waypointZ = coords[#coords].z }
 end
 
-local logged = false
+
+--[[ SelectNewFishingHole ]]
 function SelectNewFishingHole()
     logged = false
     SelectedFishingSpot = GetWaypoint(SelectedFish.fishingSpots.waypoints, math.random())
@@ -341,6 +388,7 @@ function SelectNewFishingHole()
     SelectedFishingSpot.lastStuckCheckPosition = { x = Player.Entity.Position.X, y = Player.Entity.Position.Y, z = Player.Entity.Position.Z }
 end
 
+--[[ RandomAdjustCoordinates ]]
 function RandomAdjustCoordinates(x, y, z, maxDistance)
     local angle = math.random() * 2 * math.pi
     local distance = maxDistance * math.random()
@@ -352,6 +400,37 @@ function RandomAdjustCoordinates(x, y, z, maxDistance)
     return randomX, randomY, randomZ
 end
 
+--[[ FoodCheck ]]
+function FoodCheck()
+    if not HasStatusId(48) and Food ~= "" then
+        yield("/item " .. Food)
+    end
+end
+
+--[[ PotionCheck ]]
+function PotionCheck()
+    if not HasStatusId(49) and Potion ~= "" then
+        yield("/item " .. Potion)
+    end
+end
+
+--[[ SelectFishTable ]]
+function SelectFishTable()
+    for _, fishTable in ipairs(FishTable) do
+        if AethersandToFarm == fishTable.Aethersand then
+            return fishTable
+        end
+    end
+    Dalamud.Log(string.format("%s No matching fish table found for scrip color: %s", ScriptName, AethersandToFarm))
+    return nil
+end
+
+
+--[[
+   Charracter State Functions
+  ]]
+
+--[[ CharacterState.gsFishsense ]]
 function CharacterState.gsFishSense()
     if Svc.Condition[CharacterCondition.gathering] or Svc.Condition[CharacterCondition.fishing] then
         QuitFishing()
@@ -362,6 +441,7 @@ function CharacterState.gsFishSense()
     Dalamud.Log(string.format("%s State Changed → TeleportFishingZone", ScriptName))
 end
 
+--[[ CharacterState.gsTeleportFishingZone ]]
 function CharacterState.gsTeleportFishingZone()
     if Svc.ClientState.TerritoryType ~= SelectedFish.zoneId then
         local aetheryteName = GetAetheryteName(SelectedFish.zoneId)
@@ -377,6 +457,7 @@ function CharacterState.gsTeleportFishingZone()
     end
 end
 
+--[[ CharacterState.gsGoToFishingHole ]]
 function CharacterState.gsGoToFishingHole()
     if Svc.ClientState.TerritoryType ~= SelectedFish.zoneId then
         State = CharacterState.gsTeleportFishingZone
@@ -437,7 +518,7 @@ function CharacterState.gsGoToFishingHole()
     Dalamud.Log(string.format("%s State Changed → Fishing", ScriptName))
 end
 
-ResetHardAmissTime = os.clock()
+--[[ CharacterState.gsFishing ]]
 function CharacterState.gsFishing()
     if Inventory.GetItemCount(baitVersatileLure) == 0 then
         State = CharacterState.gsBuyFishingBait
@@ -531,6 +612,7 @@ function CharacterState.gsFishing()
     yield("/wait 0.5")
 end
 
+--[[ CharacterState.gsBuyFishingBait ]]
 function CharacterState.gsBuyFishingBait()
     if Inventory.GetItemCount(baitVersatileLure) >= 1 then
         if Addons.GetAddon("Shop").Ready then
@@ -594,56 +676,25 @@ function CharacterState.gsBuyFishingBait()
     end
 end
 
---------------------
---    Movement    --
---------------------
-
-function GetDistanceToPoint(dX, dY, dZ)
-    local player = Svc.ClientState.LocalPlayer
-    if not player or not player.Position then
-        Dalamud.Log(string.format("%s GetDistanceToPoint: Player position unavailable.", ScriptName))
-        return math.huge
-    end
-
-    local px = player.Position.X
-    local py = player.Position.Y
-    local pz = player.Position.Z
-
-    local dx = dX - px
-    local dy = dY - py
-    local dz = dZ - pz
-
-    local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
-    return distance
-end
-
-function DistanceBetween(px1, py1, pz1, px2, py2, pz2)
-    local dx = px2 - px1
-    local dy = py2 - py1
-    local dz = pz2 - pz1
-
-    local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
-    return distance
-end
-
-
+--[[ CharacterState.gsReduce ]]
 function CharacterState.gsReduce()
-  if Inventory.GetCollectableItemCount(SelectedFish.fishId, 1) > 0 then
-    if not Addons.GetAddon("PurifyItemSelector").Ready then
-      yield('/action "Aetherial Reduction"')
-      yield("/wait 1")
+    if Inventory.GetCollectableItemCount(SelectedFish.fishId, 1) > 0 then
+        if not Addons.GetAddon("PurifyItemSelector").Ready then
+            yield('/action "Aetherial Reduction"')
+            yield("/wait 1")
+            return
+        end
+        if not ((automatic reducing)) then
+            if ((able to automatic reduce)) then
+                yield("/click PurifyResult Automatic")
+            else
+                yield("/callback PurifyItemSelector true 12 0")
+            end
+        end
     end
-    if not ((automatic reducing)) then
-      if ((able to automatic reduce)) then
-        yield("/click PurifyResult Automatic")
-      else
-        yield("/callback PurifyItemSelector true 12 0")
-    end
-  end
 end
 
-          
-
+--[[ CharacterState.gsRepair ]]
 function CharacterState.gsRepair()
     if Addons.GetAddon("SelectYesno").Ready then
         yield("/callback SelectYesno true 0")
@@ -753,6 +804,7 @@ function CharacterState.gsRepair()
     end
 end
 
+--[[ CharacterState.gsExtractMateria ]]
 function CharacterState.gsExtractMateria()
     if Svc.Condition[CharacterCondition.mounted] then
         Dismount()
@@ -786,29 +838,7 @@ function CharacterState.gsExtractMateria()
     end
 end
 
-function FoodCheck()
-    if not HasStatusId(48) and Food ~= "" then
-        yield("/item " .. Food)
-    end
-end
-
-function PotionCheck()
-    if not HasStatusId(49) and Potion ~= "" then
-        yield("/item " .. Potion)
-    end
-end
-
-function SelectFishTable()
-    for _, fishTable in ipairs(FishTable) do
-        if AethersandToFarm == fishTable.Aethersand then
-            return fishTable
-        end
-    end
-
-    Dalamud.Log(string.format("%s No matching fish table found for scrip color: %s", ScriptName, AethersandToFarm))
-    return nil
-end
-
+--[[ CharacterState.gsReady ]]
 function CharacterState.gsReady()
     FoodCheck()
     PotionCheck()
@@ -865,6 +895,9 @@ List of CharacterStates:
     
 ]]
 
+
+local logged = false
+ResetHardAmissTime = os.clock()
 
 LastStuckCheckTime = os.clock()
 LastStuckCheckPosition = {
