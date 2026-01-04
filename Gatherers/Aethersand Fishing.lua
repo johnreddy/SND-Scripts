@@ -177,6 +177,8 @@ FishTable = {
         },
         Aethersand                  = "Levinchrome Aethersand",
         sandItemID                  = 46246,
+        AmissResetZoneName          = "Tuliyollal",
+        AmissResetZoneID            = "Tuliyollal",
     },
 }
 
