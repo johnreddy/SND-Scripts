@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.2a
+version: 0.9.2b
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -49,7 +49,7 @@ configs:
 --]=====]
 
 --[[
-           a    Typo checks
+           b    Typo fixes
     -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
                 Removed Scrip turnins and spending
@@ -161,7 +161,7 @@ FishTable = {
         fishName                    = "Purple Palate",
         fishId                      = 46249,
         baitName                    = "Versatile Lure",
-        zoneId                      = 1190,
+        zoneId                      = 1188,
         zoneName                    = "Kozuma'uka",
         autoHookPreset              = "AH4_H4sIAAAAAAAACu1Yy27bOBT9FYNrcaAHqYd3rpu0wSRpEDvTRTELSryyiciSS1Fp08D/PqAk2pYj2U3aATqY7uxL8uhc8twH+YQmlSqmrFTlNF2g8RM6y1mcwSTL0FjJCiykBy9FDrtBboYuOBq7YWShGykKKdQjGjsWuijPviZZxYHvzHr+psG6KopkqcHqH67+VeP4oYXeredLCeWyyDgaO7bdQT4OXWNEQWeFfZLMdFmtBhwjjk0OGAVdRr4BKbIMEjWM4+yvck+TKiQXLKt3Jn8AaQzdyVbfxxzX96MD1rTL2u0MT+LiAdA4ZVlpPn8uyuXZI5TmZIhj00NI2oH0zNGye5gtRareMFFvhzaUxjBTLLkv0Zi2h+WHz3H3UUmLesOUgDwZEiBxbP/4OVEDJMU3mDLVyM9wOFzsHsjOnPJ8yTLB7stz9lBIDdAxGOc8q2u/haR4AInGjt6yvvjxw+c687sUTp3YG7F4x1b1Bk3yRQayNHS02Dgae4FNnvnZ+US42Vjo7KuSrJMHtlT1Ac6L2Re2vshVJZQo8ndM5GYjsWOhy0rCFZQlWwAaI2Sh65oTui5yQC3C4xoaufTgXRalejXejYQS+hkijAbGmy/W4zs+szUkSrJsWkkJufpJXh6g/jRfe9k+87j36/Ws80ImUEfnF7Y2h10buba2WdUJrFZZM1WsdYIQ+WKmYF2Lc+dlq76J/DnO7cM99+mLWMVMqHORZeWR8dsqLz9UBuEuF58r0MwQc8H2/cjFNAgTTFyP4ZhThhn1I5eFqUd9QBsLXYpSfUg1yxKNPz3VfPUWbJNIsz9DXv4FsmRKZDDSMzTgdSFXLHtfFPcawqS3j8Dq/9pegtrGXx3oJnW0g/uH1ZqaHSROEOlNbDFnShb5XjgPLJ+LFciDgL8S+XYIjV3yh20hXS375mp7d75Tzz+gZnt71C5hATln8vGHfXYjnaLvSnhbVO10M6+xnNjZLpiv969Zt9u9D3n2+HEJ+SRR4gEuOORKJLpC99HZQ/geJ3sWz6VYv5B2QF1vu/KVxDsYL6feLtcZYpIqkLc6FqdFlSvzue3QlFWLpboUK90mEOo1Q928YrukbT4r2TQj+sdenTW+XRdqwD09o0ZgUgflYNfkBTQifV3TYKOmG05TRUwg38LnSkjgM8VUpfsc3dEORPeJaH1p4HQm9or+mLpfJN+TOj0uyBcqbkBaHf04feo5Lp2hQz96Y9AE2ppSq3p/XaO1uxIaQdZXm8kDE5nWmpHaXu0B3wVOSIq5H3BM4iDBYZhynESO56exZ7uhgzbW82JDvJCGw8XmFvjoii0WhSp/yUrz71eD30HwvUHwI9nxVKD8To6/k+Ork6NDAg408nBEHAeTlNuYURrgKPFdOwkTgDhAm79NZ94+KH3aGpp8+ekJdRKn75JoOHHeVHKdweiGZUx1LyXOscKzbTl0IJmG666Eu5yD3D1cmJc0vXiy0sVjB9H3pEGjw9u6131xCTWpSqYsgVmmM2HrJI3oiecM/RjyyzzBzdZMQlpl71nODQv9VkH7eHSKb7t/nlUf8gWfF9MlJPfbc95777I7F/FXX0z1Ym1pO1qne9tsr5f6Z2PeTetrTjrX0DDmXhhgcHiIScxSHMVpjB07BM4DCilx61ag2wYE9pE7559sdFM9LqsfEHK/WF+tzn6VP3v/+7+JtTnG/45Y0zBgTsxCDAFNMSGphxmJfBxzQmgchIlHvTo1N7gtxbfzER4pWK1HeDQBtQQ5wqPDjLv3Fd+n3E5ciu3UTzFhuhSknGKwuQ0kpWHgeGjzD5+8M2i8GAAA",
         fishingSpots = {
@@ -283,7 +283,7 @@ end
 function CanExtractMateria()
     local bondedItems = Inventory.GetSpiritbondedItems()
     local count = (bondedItems and bondedItems.Count) or 0
-    Dalamud.Log(string.format(", ScriptName Found %d spiritbonded items.", ScriptName, count))
+    Dalamud.Log(string.format("%s Found %d spiritbonded items.", ScriptName, count))
     return count
 end
 
