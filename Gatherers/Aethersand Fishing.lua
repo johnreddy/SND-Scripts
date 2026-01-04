@@ -916,12 +916,6 @@ end
 --=========================== EXECUTION ==========================--
 --[[
 List of CharacterStates:
-#TODO create
-  - gsResetAmiss
-    Select place to teleport to and go there to reset hard amiss timer
-  - gsReduce
-    Reduce all items capable of Aetherial Reduction "Purify"
-
 #TODO Document
   - gsFishSense
     Use OnChatMessage trigger to force relocation when seeing "fish sense something amiss".
@@ -935,6 +929,10 @@ List of CharacterStates:
     Go buy the bait if needed
   - gsRepair
   - gsExtractMateria
+  - gsResetAmiss
+    Select place to teleport to and go there to reset hard amiss timer
+  - gsReduce
+    Reduce all items capable of Aetherial Reduction "Purify"
   - gsReady
 
     
