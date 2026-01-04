@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.3a
+version: 0.9.4
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -49,7 +49,8 @@ configs:
 --]=====]
 
 --[[
-    -> 0.9.3a   Fixed typos.  Made bait type variable
+    -> 0.9.4    Created BaitCheck
+    -> 0.9.3    Fixed typos.  Made bait type variable
     -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
                 Removed Scrip turnins and spending
@@ -410,8 +411,27 @@ function FoodCheck()
 end
 
 --[[ BaitCheck ]]
-Function BaitCheck()
-    if not 
+function BaitCheck()
+    if Inventory.GetItemCount(SelectedFish.baitId) == 0 then
+        Dalamud.Log(string.format("%s BaitCheck found no %s, return to gsReady for bait acquisition", ScriptName))
+        return
+    else
+        if not Addons.GetAddon("Bait").Ready then
+            yield('/action "Bait"')
+            yield("/wait 0.2")
+            local looper = 0
+            while not Addons.GetAddon("Bait").Ready and looper < 50 do
+                yield("/wait 0.1")
+                looper = looper + 1
+            end
+            if not Addons.GetAddon("Bait").Ready then
+                Dalamud.Log(string.format("%s Not able to open bait window", ScriptName))
+            end
+        end
+        yield(string.format("/callback Bait true %d false", SelectedFish.baitId))    
+    end
+    return
+end
 
 
 --[[ PotionCheck ]]
