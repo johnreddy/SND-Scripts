@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.0
+version: 0.9.1
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -53,6 +53,7 @@ configs:
                 Removed Scrip turnins and spending
                 Moves utility functions and CharacterState functions
                 Added initial header comments to functions
+                Initial gsReduce function
     -> 0.9.0    Initial adaptation from https://github.com/MinnuVerse/SnD/blob/main/Gatherers/FishingGathererScrips.lua
                 Change ScriptName logging to a variable
                 Removed collectable turn-ins, Script fish
