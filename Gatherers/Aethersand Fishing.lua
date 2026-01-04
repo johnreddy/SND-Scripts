@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.2b
+version: 0.9.3
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -49,7 +49,7 @@ configs:
 --]=====]
 
 --[[
-           b    Typo fixes
+    -> 0.9.3    Fixed typos.  Made bait type variable
     -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
                 Removed Scrip turnins and spending
