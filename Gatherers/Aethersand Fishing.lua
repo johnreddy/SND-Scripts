@@ -17,8 +17,10 @@ configs:
             - "Levinchrome Aethersand"
     Food:
         description: "Leave blank if you don't want to use any food. If its HQ include <hq> next to the name \"Baked Eggplant <hq>\"."
+        default: "Nasi Goreng <HQ>"
     Potion:
         description: "Leave blank if you don't want to use any potions. If its HQ include <hq> next to the name \"Superior Spiritbond Potion <hq>\"."
+        default: "Superior Spiritbond Potion <HQ>"
     MinInventoryFreeSlots:
         description: Minimum free inventory slots required to start turn-ins.
         default: 5
@@ -49,7 +51,7 @@ configs:
 --]=====]
 
 --[[
-    -> 0.9.4b   Created BaitCheck
+    -> 0.9.4b   Created BaitCheck.  Set default consumables. 
     -> 0.9.3    Fixed typos.  Made bait type variable
     -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
