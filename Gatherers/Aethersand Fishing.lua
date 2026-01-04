@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.1
+version: 0.9.2
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -49,6 +49,7 @@ configs:
 --]=====]
 
 --[[
+    -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
                 Removed Scrip turnins and spending
                 Moves utility functions and CharacterState functions
@@ -177,6 +178,8 @@ FishTable = {
         },
         Aethersand                  = "Levinchrome Aethersand",
         sandItemID                  = 46246,
+        AmissResetZoneName          = "Tuliyollal",
+        AmissResetZoneID            = 1185,
     },
 }
 
@@ -723,6 +726,20 @@ function CharacterState.gsReduce()
     end
 end
 
+--[[ CharacterState.gsResetAmiss ]]
+function CharacterState.gsResetAmiss()
+    if Svc.ClientState.TerritoryType == SelectedFish.AmissResetZoneID then
+        Dalamud.Log(string.format("%s State changed ResetAmiss → Ready", ScriptName))
+        State = CharacterState.gsReady
+        return
+    else
+        Dalamud.Log(string.format("%s Teleport to %s to hard reset fish amiss sense", ScriptName, SelectedFish.AmissResetZoneName))
+        TeleportTo(SelectedFish.AmissResetZoneName)
+        return
+    end
+end
+        
+
 --[[ CharacterState.gsRepair ]]
 function CharacterState.gsRepair()
     if Addons.GetAddon("SelectYesno").Ready then
@@ -900,12 +917,6 @@ end
 --=========================== EXECUTION ==========================--
 --[[
 List of CharacterStates:
-#TODO create
-  - gsResetAmiss
-    Select place to teleport to and go there to reset hard amiss timer
-  - gsReduce
-    Reduce all items capable of Aetherial Reduction "Purify"
-
 #TODO Document
   - gsFishSense
     Use OnChatMessage trigger to force relocation when seeing "fish sense something amiss".
@@ -919,6 +930,10 @@ List of CharacterStates:
     Go buy the bait if needed
   - gsRepair
   - gsExtractMateria
+  - gsResetAmiss
+    Select place to teleport to and go there to reset hard amiss timer
+  - gsReduce
+    Reduce all items capable of Aetherial Reduction "Purify"
   - gsReady
 
     
