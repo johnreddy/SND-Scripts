@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.1
+version: 0.9.2
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -49,6 +49,7 @@ configs:
 --]=====]
 
 --[[
+    -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
                 Removed Scrip turnins and spending
                 Moves utility functions and CharacterState functions
