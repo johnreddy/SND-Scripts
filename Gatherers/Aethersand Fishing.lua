@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.4
+version: 0.9.4a
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -49,7 +49,7 @@ configs:
 --]=====]
 
 --[[
-    -> 0.9.4    Created BaitCheck
+    -> 0.9.4a   Created BaitCheck
     -> 0.9.3    Fixed typos.  Made bait type variable
     -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
@@ -75,7 +75,7 @@ configs:
 
 --=========================== VARIABLES ==========================--
 
-import("System")
+import("Systaem")
 import("System.Numerics")
 
 ScriptName="[AetherFishing]"
@@ -429,6 +429,9 @@ function BaitCheck()
             end
         end
         yield(string.format("/callback Bait true %d false", SelectedFish.baitId))    
+    end
+    if Addons.GetAddon("Bait").Ready then
+        yield("/callback Bait true -1")
     end
     return
 end
