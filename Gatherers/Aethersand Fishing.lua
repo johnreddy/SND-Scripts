@@ -178,7 +178,7 @@ FishTable = {
         Aethersand                  = "Levinchrome Aethersand",
         sandItemID                  = 46246,
         AmissResetZoneName          = "Tuliyollal",
-        AmissResetZoneID            = "Tuliyollal",
+        AmissResetZoneID            = 1185,
     },
 }
 
@@ -724,6 +724,20 @@ function CharacterState.gsReduce()
         return
     end
 end
+
+--[[ CharacterState.gsResetAmiss ]]
+function CharacterState.gsResetAmiss()
+    if Svc.ClientState.TerritoryType == SelectedFish.AmissResetZoneID then
+        Dalamud.Log(string.format("%s State changed ResetAmiss → Ready", ScriptName))
+        State = CharacterState.gsReady
+        return
+    else
+        Dalamud.Log(string.format("%s Teleport to %s to hard reset fish amiss sense", ScriptName, SelectedFish.AmissResetZoneName))
+        TeleportTo(SelectedFish.AmissResetZoneName)
+        return
+    end
+end
+        
 
 --[[ CharacterState.gsRepair ]]
 function CharacterState.gsRepair()
