@@ -679,18 +679,46 @@ end
 --[[ CharacterState.gsReduce ]]
 function CharacterState.gsReduce()
     if Inventory.GetCollectableItemCount(SelectedFish.fishId, 1) > 0 then
-        if not Addons.GetAddon("PurifyItemSelector").Ready then
+        if Addons.GetAddon("PurifyItemSelector").Ready then
+            if Addons.GetAddon("PurifyAutoDialog").Ready then
+                yield("/wait 1")
+                return
+            else
+                if Addons.GetAddon("PurifyResult").Ready then
+                    yield("/click PurifyResult Automatic")
+                    yield("/wait 1")
+                    return
+                else
+                    Dalamud.Log(string.format("%s Initiating Aetherial Reduction", ScriptName))
+                    yield("/callback PurifyItemSelector true 12 0")
+                    yield("/wait 1")
+                    return
+                end
+            end
+        else
             yield('/action "Aetherial Reduction"')
             yield("/wait 1")
             return
         end
-        if not ((automatic reducing)) then
-            if ((able to automatic reduce)) then
-                yield("/click PurifyResult Automatic")
-            else
-                yield("/callback PurifyItemSelector true 12 0")
-            end
+    else
+        if Addons.GetAddon("PurifyItemSelector").Ready then
+            yield("/callback PurifyItemSelector true -1 0")
+            yield("/wait 1")
+            return
         end
+        if Addons.GetAddon("PurifyResult").Ready then
+            yield("/click PurifyResult Close")
+            yield("/wait 1")
+            return
+        end
+        if Addons.GetAddon("PurifyAutoDialog").Ready then
+            yield("/click PurifyAutoDialog CancelExit")
+            yield("/wait 1")
+            return
+        end
+        Dalamud.Log(string.format("%s State Changed Reduce → Ready", ScriptName))
+        State = CharacterState.gsReady
+        return
     end
 end
 
