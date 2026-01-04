@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.4a
+version: 0.9.4b
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -49,7 +49,7 @@ configs:
 --]=====]
 
 --[[
-    -> 0.9.4a   Created BaitCheck
+    -> 0.9.4b   Created BaitCheck
     -> 0.9.3    Fixed typos.  Made bait type variable
     -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
@@ -414,7 +414,6 @@ end
 function BaitCheck()
     if Inventory.GetItemCount(SelectedFish.baitId) == 0 then
         Dalamud.Log(string.format("%s BaitCheck found no %s, return to gsReady for bait acquisition", ScriptName))
-        return
     else
         if not Addons.GetAddon("Bait").Ready then
             yield('/action "Bait"')
@@ -432,8 +431,8 @@ function BaitCheck()
     end
     if Addons.GetAddon("Bait").Ready then
         yield("/callback Bait true -1")
+        yield("/wait 0.1")
     end
-    return
 end
 
 
