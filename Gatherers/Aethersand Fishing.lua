@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.4b
+version: 0.9.5
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -51,7 +51,11 @@ configs:
 --]=====]
 
 --[[
-    -> 0.9.4b   Created BaitCheck.  Set default consumables. 
+    -> 0.9.5    Created BaitCheck.
+                Wrapped checks in gsReady.
+                More Typo cleanup
+    -> 0.9.4c   Set default consumables. 
+                More Typo cleanup
     -> 0.9.3    Fixed typos.  Made bait type variable
     -> 0.9.2    Added gsResetAmiss
     -> 0.9.1    Removed AutoRetainer
