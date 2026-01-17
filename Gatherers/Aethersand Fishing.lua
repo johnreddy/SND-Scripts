@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5b
+version: 0.9.5c
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -17,10 +17,8 @@ configs:
             - "Levinchrome Aethersand"
     Food:
         description: "Leave blank if you don't want to use any food. If its HQ include <hq> next to the name \"Baked Eggplant <hq>\"."
-        default: "Nasi Goreng <HQ>"
     Potion:
         description: "Leave blank if you don't want to use any potions. If its HQ include <hq> next to the name \"Superior Spiritbond Potion <hq>\"."
-        default: "Superior Spiritbond Potion <HQ>"
     MinInventoryFreeSlots:
         description: Minimum free inventory slots required to start turn-ins.
         default: 5
@@ -51,7 +49,7 @@ configs:
 --]=====]
 
 --[[
-    ->      b   Wait on Potion & Food checks
+    ->      c   Wait on Potion & Food checks
     -> 0.9.5    Created BaitCheck.
                 Wrapped checks in gsReady.
                 More Typo cleanup
@@ -413,7 +411,7 @@ end
 --[[ FoodCheck ]]
 function FoodCheck()
     if not HasStatusId(48) and Food ~= "" then
-        yield(string.format("/item \"%s\"", Food))
+        yield(string.format("/item '%s'", Food))
         yield("/wait 3")
     end
 end
@@ -421,7 +419,7 @@ end
 --[[ PotionCheck ]]
 function PotionCheck()
     if not HasStatusId(49) and Potion ~= "" then
-        yield(string.format("/item \"%s\"", Potion))
+        yield(string.format("/item '%s'", Potion))
         yield("/wait 3")
     end
 end
