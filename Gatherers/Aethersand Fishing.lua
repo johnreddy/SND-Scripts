@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5c
+version: 0.9.5d
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -40,7 +40,7 @@ configs:
         default: true
     MoveSpotsAfter:
         description: Number of minutes to fish one spot before moving to the next.
-        default: 30
+        default: 15
     ResetHardAmissAfter:
         description: Number of minutes to farm in current instance before teleporting away and back.
         default: 120
@@ -49,7 +49,7 @@ configs:
 --]=====]
 
 --[[
-    ->      c   Wait on Potion & Food checks
+    ->      d   Wait on Potion & Food checks
     -> 0.9.5    Created BaitCheck.
                 Wrapped checks in gsReady.
                 More Typo cleanup
@@ -411,7 +411,7 @@ end
 --[[ FoodCheck ]]
 function FoodCheck()
     if not HasStatusId(48) and Food ~= "" then
-        yield(string.format("/item '%s'", Food))
+        yield("/item " .. Food)
         yield("/wait 3")
     end
 end
@@ -419,7 +419,7 @@ end
 --[[ PotionCheck ]]
 function PotionCheck()
     if not HasStatusId(49) and Potion ~= "" then
-        yield(string.format("/item '%s'", Potion))
+        yield("/item " .. Potion)
         yield("/wait 3")
     end
 end
