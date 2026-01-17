@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5
+version: 0.9.5a
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -51,6 +51,7 @@ configs:
 --]=====]
 
 --[[
+    ->      a   Wait on Potion & Food checks
     -> 0.9.5    Created BaitCheck.
                 Wrapped checks in gsReady.
                 More Typo cleanup
@@ -413,6 +414,7 @@ end
 function FoodCheck()
     if not HasStatusId(48) and Food ~= "" then
         yield("/item " .. Food)
+        yield("/wait 3")
     end
 end
 
@@ -446,6 +448,7 @@ end
 function PotionCheck()
     if not HasStatusId(49) and Potion ~= "" then
         yield("/item " .. Potion)
+        yield("/wait 3")
     end
 end
 
