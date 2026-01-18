@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5d
+version: 0.9.5e
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -41,14 +41,19 @@ configs:
     MoveSpotsAfter:
         description: Number of minutes to fish one spot before moving to the next.
         default: 15
+        min: 2
+        max: 30
     ResetHardAmissAfter:
         description: Number of minutes to farm in current instance before teleporting away and back.
         default: 120
+        min: 2
+        max: 180
 
 [[End Metadata]]
 --]=====]
 
 --[[
+    ->      e   Setting config ranges
     ->      d   Wait on Potion & Food checks
     -> 0.9.5    Created BaitCheck.
                 Wrapped checks in gsReady.
