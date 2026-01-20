@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5g
+version: 0.9.5h
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -53,6 +53,7 @@ configs:
 --]=====]
 
 --[[
+    ->      h   Wait for repair and extractions
     ->      g   Logging to find why it's not mounting
     ->      e   Setting config ranges
     ->      d   Wait on Potion & Food checks
@@ -809,6 +810,11 @@ function CharacterState.gsRepair()
                 if not Addons.GetAddon("Repair").Ready then
                     local repairActionId = 6
                     Actions.ExecuteGeneralAction(repairActionId)
+                    yield("/echo Repairing...")
+                    for i=12,1,-2 do
+                        yield("/echo ..."..i)
+                        yield("/wait 2")
+                    end
                 end
             else
                 State = CharacterState.gsReady
@@ -904,7 +910,7 @@ function CharacterState.gsExtractMateria()
         if not Addons.GetAddon("Materialize").Ready then
             local extractionActionId = 14
             Actions.ExecuteGeneralAction(extractionActionId)
-            yield("/wait 1")
+            yield("/wait 2")
             return
         end
 
