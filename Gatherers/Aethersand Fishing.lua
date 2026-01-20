@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5f
+version: 0.9.5g
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -53,7 +53,7 @@ configs:
 --]=====]
 
 --[[
-    ->      f   Logging to find why it's not mounting
+    ->      g   Logging to find why it's not mounting
     ->      e   Setting config ranges
     ->      d   Wait on Potion & Food checks
     -> 0.9.5    Created BaitCheck.
@@ -535,7 +535,7 @@ function CharacterState.gsGoToFishingHole()
     end
 
     local distanceToWaypoint = GetDistanceToPoint(SelectedFishingSpot.waypointX, Player.Entity.Position.Y, SelectedFishingSpot.waypointZ)
-    Dalamud.Log(string.format("%s distance to waypoint (%.2f, %.2f, %.2f): %d", ScriptName, SelectedFishingSpot.waypointX, SelectedFishingSpot.waypointY, SelectedFishingSpot.waypointZ, distanceToWaypoint))
+    Dalamud.Log(string.format("%s distance to waypoint (%.2f, %.2f, %.2f): %.2f", ScriptName, SelectedFishingSpot.waypointX, SelectedFishingSpot.waypointY, SelectedFishingSpot.waypointZ, distanceToWaypoint))
 
     if distanceToWaypoint > 10 then
         if not Svc.Condition[CharacterCondition.mounted] then
