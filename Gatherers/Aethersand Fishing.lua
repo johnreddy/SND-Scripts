@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5h
+version: 0.9.5i
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -53,7 +53,7 @@ configs:
 --]=====]
 
 --[[
-    ->      h   Wait for repair and extractions
+    ->      i   Wait for repair and materia extractions
     ->      g   Logging to find why it's not mounting
     ->      e   Setting config ranges
     ->      d   Wait on Potion & Food checks
@@ -916,12 +916,15 @@ function CharacterState.gsExtractMateria()
 
         if Addons.GetAddon("MaterializeDialog").Ready then
             yield("/callback MaterializeDialog true 0")
+            yield("/wait 2")
         else
             yield("/callback Materialize true 2 0")
+            yield("/wait 2")
         end
     else
         if Addons.GetAddon("Materialize").Ready then
             yield("/callback Materialize true -1")
+            yield("/wait 1")
         else
             State = CharacterState.gsReady
             Dalamud.Log(string.format("%s State Changed → Ready", ScriptName))
