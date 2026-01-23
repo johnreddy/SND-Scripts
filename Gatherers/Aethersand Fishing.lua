@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5j
+version: 0.9.5k
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -53,7 +53,7 @@ configs:
 --]=====]
 
 --[[
-    ->      j   Wait for repair and materia extractions
+    ->      k   Wait for repair and materia extractions
     ->      g   Logging to find why it's not mounting
     ->      e   Setting config ranges
     ->      d   Wait on Potion & Food checks
@@ -903,6 +903,7 @@ function CharacterState.gsExtractMateria()
     end
 
     if Svc.Condition[CharacterCondition.occupiedMateriaExtractionAndRepair] then
+        yield("/wait 1")
         return
     end
 
