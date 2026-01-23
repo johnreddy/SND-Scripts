@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author:  'johnreddy || Adapted from pot0to and Minnu'
-version: 0.9.5k
+version: 0.9.6
 description: Fishing for Aethersand
 plugin_dependencies:
 - AutoHook
@@ -53,10 +53,10 @@ configs:
 --]=====]
 
 --[[
-    ->      k   Wait for repair and materia extractions
-    ->      g   Logging to find why it's not mounting
-    ->      e   Setting config ranges
-    ->      d   Wait on Potion & Food checks
+    -> 0.9.6    Wait for repair and materia extractions
+                Logging to find why it's not mounting
+                Setting config ranges
+                Wait on Potion & Food checks
     -> 0.9.5    Created BaitCheck.
                 Wrapped checks in gsReady.
                 More Typo cleanup
@@ -205,7 +205,7 @@ function Mount()
     Dalamud.Log(string.format("%s Using Mount Roulette...", ScriptName))
     repeat
         Actions.ExecuteGeneralAction(mountActionId)
-        yield("/wait 1")
+        yield("/wait 2")
     until Svc.Condition[CharacterCondition.mounted]
 end
 
@@ -452,7 +452,7 @@ function BaitCheck()
     end
     if Addons.GetAddon("Bait").Ready then
         yield("/callback Bait true -1")
-        yield("/wait 0.1")
+        yield("/wait 1")
     end
 end
 
@@ -509,6 +509,10 @@ function CharacterState.gsGoToFishingHole()
 
     local now = os.clock()
     if now - SelectedFishingSpot.startTime > 10 then
+        if not Svc.Condition[CharacterCondition.mounted] then
+            Mount()
+            return
+        end
         SelectedFishingSpot.startTime = now
         local x = Player.Entity.Position.X
         local y = Player.Entity.Position.Y
